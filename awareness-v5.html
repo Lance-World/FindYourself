@@ -48,7 +48,12 @@ canvas#bgc{position:fixed;inset:0;z-index:0;pointer-events:none}
 .sec.on{display:block}
 
 /* ── COORD DIAGRAM ── */
-.coord-wrap{width:100%;position:relative;margin-bottom:8px;border-radius:14px;overflow:hidden;border:1px solid var(--br);background:linear-gradient(160deg,rgba(18,14,36,.9),rgba(10,7,22,.95))}
+.coord-wrap{width:100%;position:relative;margin-bottom:8px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:
+  radial-gradient(circle at 50% 78%,rgba(251,191,36,.16),transparent 23%),
+  radial-gradient(circle at 50% 44%,rgba(52,211,153,.12),transparent 30%),
+  radial-gradient(circle at 24% 28%,rgba(192,132,252,.18),transparent 38%),
+  radial-gradient(circle at 80% 24%,rgba(244,114,182,.14),transparent 36%),
+  linear-gradient(160deg,rgba(18,14,36,.92),rgba(10,7,22,.97));box-shadow:inset 0 0 42px rgba(192,132,252,.08)}
 #coord-svg{width:100%;display:block}
 .coord-hint{text-align:center;font-size:11px;color:var(--fg3);letter-spacing:.07em;margin-bottom:16px}
 @keyframes tw{0%,100%{opacity:.3}55%{opacity:.9}}
@@ -427,103 +432,132 @@ function buildSVG(r){
   svg.innerHTML='';
   cancelAnimationFrame(glowRaf);
 
-  // defs glow
+  // defs: dreamy gradients, glow, arrowheads
   const defs=mkEl('defs',{});
-  ['gx','gy','gz','gc'].forEach(id=>{
-    const f=mkEl('filter',{id,x:'-100%',y:'-100%',width:'300%',height:'300%'});
-    const fe=mkEl('feGaussianBlur',{'in':'SourceGraphic',stdDeviation:'3.5',result:'b'});
+
+  const axisGradients=[
+    ['grad-x','#d8b4fe','#60a5fa'],
+    ['grad-y','#f9a8d4','#fb7185'],
+    ['grad-z','#a7f3d0','#34d399'],
+    ['grad-center','#fff7ed','#fbbf24']
+  ];
+  axisGradients.forEach(([id,c1,c2])=>{
+    const g=mkEl('linearGradient',{id,x1:'0%',y1:'0%',x2:'100%',y2:'100%'});
+    g.appendChild(mkEl('stop',{offset:'0%','stop-color':c1,'stop-opacity':'1'}));
+    g.appendChild(mkEl('stop',{offset:'100%','stop-color':c2,'stop-opacity':'1'}));
+    defs.appendChild(g);
+  });
+
+  ['gx','gy','gz','gc','soft'].forEach(id=>{
+    const f=mkEl('filter',{id,x:'-140%',y:'-140%',width:'380%',height:'380%'});
+    const fe=mkEl('feGaussianBlur',{'in':'SourceGraphic',stdDeviation:id==='soft'?'5.5':'3.8',result:'b'});
     const fm=mkEl('feMerge',{});
-    fm.appendChild(mkEl('feMergeNode',{'in':'b'}));fm.appendChild(mkEl('feMergeNode',{'in':'SourceGraphic'}));
+    fm.appendChild(mkEl('feMergeNode',{'in':'b'}));
+    fm.appendChild(mkEl('feMergeNode',{'in':'SourceGraphic'}));
     f.appendChild(fe);f.appendChild(fm);defs.appendChild(f);
+  });
+
+  Object.entries(DIRS).forEach(([ax,d])=>{
+    const marker=mkEl('marker',{id:`arrow-${ax}`,viewBox:'0 0 10 10',refX:'8.5',refY:'5',markerWidth:'5',markerHeight:'5',orient:'auto-start-reverse'});
+    marker.appendChild(mkEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:d.color,opacity:'.88'}));
+    defs.appendChild(marker);
   });
   svg.appendChild(defs);
 
-  // ambient bg stars
-  for(let i=0;i<32;i++){
-    const c=mkEl('circle',{cx:10+Math.random()*340,cy:8+Math.random()*254,r:Math.random()*1.1+.2,fill:`rgba(255,255,255,${(Math.random()*.2+.04).toFixed(2)})`});
+  // soft nebula stars in coordinate area
+  for(let i=0;i<42;i++){
+    const warm=Math.random()<.28;
+    const c=mkEl('circle',{cx:12+Math.random()*336,cy:10+Math.random()*250,r:Math.random()*1.35+.25,fill:warm?`rgba(251,207,232,${(Math.random()*.26+.08).toFixed(2)})`:`rgba(255,255,255,${(Math.random()*.23+.05).toFixed(2)})`});
     svg.appendChild(c);
   }
 
-  // grid circles at origin
-  [20,40,60,80,100].forEach(r2=>{
-    const c=mkEl('circle',{cx:OX,cy:OY,r:r2,fill:'none',stroke:'rgba(255,255,255,.04)','stroke-width':'.6'});
+  // luminous ground / perspective rings
+  [22,38,56,76,98,122].forEach((rr,i)=>{
+    const c=mkEl('ellipse',{cx:OX,cy:OY+4,rx:rr,ry:rr*.34,fill:'none',stroke:i%2?'rgba(255,255,255,.055)':'rgba(192,132,252,.105)','stroke-width':i<2?'.9':'.65'});
     svg.appendChild(c);
   });
 
-  // axes
+  // vertical light pillar and meditative origin glow
+  const pillar=mkEl('line',{x1:OX,y1:OY+18,x2:OX,y2:32,stroke:'rgba(167,243,208,.28)','stroke-width':'2.2','stroke-linecap':'round',filter:'url(#soft)'});
+  svg.appendChild(pillar);
+  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'18',fill:'rgba(251,191,36,.13)',filter:'url(#soft)'}));
+  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'7',fill:'rgba(255,247,237,.82)',filter:'url(#gc)'}));
+
+  // axes: layered glow + solid arrow line + magical ticks
   Object.entries(DIRS).forEach(([ax,d])=>{
-    const end=axPt(ax,7.5);
-    // dashed axis line
-    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:end.x,y2:end.y,stroke:d.color+'3a','stroke-width':'1','stroke-dasharray':'3,5'}));
-    // tick dots + numbers
+    const end=axPt(ax,7.35);
+    const grad=ax==='x'?'grad-x':ax==='y'?'grad-y':'grad-z';
+
+    // outer aura
+    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:end.x,y2:end.y,stroke:d.color+'24','stroke-width':'8','stroke-linecap':'round',filter:'url(#soft)'}));
+    // subtle trail
+    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:end.x,y2:end.y,stroke:`url(#${grad})`,'stroke-width':'2.1','stroke-linecap':'round','marker-end':`url(#arrow-${ax})`,opacity:'.9'}));
+    // tiny dotted stardust on axis
     for(let lv=1;lv<=7;lv++){
       const p=axPt(ax,lv);
-      svg.appendChild(mkEl('circle',{cx:p.x,cy:p.y,r:'2',fill:d.color+'50'}));
+      const halo=mkEl('circle',{cx:p.x,cy:p.y,r:'7.2',fill:d.color+'12',filter:'url(#soft)'});
+      svg.appendChild(halo);
+      const dot=mkEl('circle',{cx:p.x,cy:p.y,r:lv===1?'3.6':'3.2',fill:`url(#${grad})`,stroke:'rgba(255,255,255,.42)','stroke-width':'.55',filter:`url(#g${ax})`});
+      svg.appendChild(dot);
+
+      // small four-point sparkle for each tick
+      const sparkle=mkEl('path',{d:`M ${p.x} ${p.y-5} L ${p.x+1.25} ${p.y-1.25} L ${p.x+5} ${p.y} L ${p.x+1.25} ${p.y+1.25} L ${p.x} ${p.y+5} L ${p.x-1.25} ${p.y+1.25} L ${p.x-5} ${p.y} L ${p.x-1.25} ${p.y-1.25} Z`,fill:'rgba(255,255,255,.36)'});
+      svg.appendChild(sparkle);
+
       let tx=p.x,ty=p.y;
-      if(ax==='x'){tx+=1;ty+=12;}else if(ax==='y'){tx+=9;ty+=4;}else{tx-=9;ty+=12;}
-      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:d.color+'55','font-size':'7.5','text-anchor':'middle','font-family':'Noto Serif TC,serif'},lv));
+      if(ax==='x'){tx+=2;ty+=15;}else if(ax==='y'){tx+=13;ty+=4;}else{tx-=13;ty+=15;}
+      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:'rgba(255,255,255,.72)','font-size':'9.5','text-anchor':'middle','font-family':'Noto Serif TC,serif','font-weight':'500'},lv));
     }
-    // axis label at end
+
+    // axis label at end, larger and clearer on mobile
     const lp=axPt(ax,7);
     let lx=lp.x,ly=lp.y;
-    if(ax==='x'){lx+=16;ly+=2;}else if(ax==='y'){lx+=16;ly-=2;}else{lx-=16;ly+=2;}
-    svg.appendChild(mkEl('text',{x:lx,y:ly,fill:d.color+'bb','font-size':'11','text-anchor':'middle','font-family':'Noto Serif TC,serif','font-weight':'300'},d.label));
-    svg.appendChild(mkEl('text',{x:lx,y:ly+11,fill:d.color+'66','font-size':'8','text-anchor':'middle','font-family':'Noto Sans TC,sans-serif'},d.sub));
+    if(ax==='x'){lx+=20;ly+=3;}else if(ax==='y'){lx+=18;ly-=5;}else{lx-=20;ly+=3;}
+    svg.appendChild(mkEl('text',{x:lx,y:ly,fill:d.color,'font-size':'14','text-anchor':'middle','font-family':'Noto Serif TC,serif','font-weight':'500',filter:`url(#g${ax})`},d.label));
+    svg.appendChild(mkEl('text',{x:lx,y:ly+13,fill:'rgba(255,255,255,.6)','font-size':'9.2','text-anchor':'middle','font-family':'Noto Sans TC,sans-serif'},d.sub));
   });
-
-  // origin dot
-  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'3.5',fill:'rgba(255,255,255,.3)'}));
 
   if(!r){
     document.getElementById('coord-hint').textContent='✦ 輸入狀態後，座標點將在此亮起';
     return;
   }
 
-  // result: draw connector lines
+  // result connector lines, brighter but still soft
   ['x','y','z'].forEach(ax=>{
     const p=axPt(ax,r[ax]);
     const col=DIRS[ax].color;
-    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:p.x,y2:p.y,stroke:col+'55','stroke-width':'1.8'}));
+    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:p.x,y2:p.y,stroke:col+'75','stroke-width':'2.35','stroke-linecap':'round',filter:`url(#g${ax})`}));
   });
 
-  // centroid star (X+Y+Z average position)
   const px=axPt('x',r.x),py=axPt('y',r.y),pz=axPt('z',r.z);
   const centX=(px.x+py.x+pz.x)/3, centY=(px.y+py.y+pz.y)/3;
 
-  // glow blobs for each axis star
   const starDefs=[
-    {pt:px,col:DIRS.x.color,fid:'gx',ax:'x',lv:r.x},
-    {pt:py,col:DIRS.y.color,fid:'gy',ax:'y',lv:r.y},
-    {pt:pz,col:DIRS.z.color,fid:'gz',ax:'z',lv:r.z},
-    {pt:{x:centX,y:centY},col:'#ffffff',fid:'gc',ax:'c',lv:null},
+    {pt:px,col:DIRS.x.color,fid:'gx',ax:'x',lv:r.x,grad:'grad-x'},
+    {pt:py,col:DIRS.y.color,fid:'gy',ax:'y',lv:r.y,grad:'grad-y'},
+    {pt:pz,col:DIRS.z.color,fid:'gz',ax:'z',lv:r.z,grad:'grad-z'},
+    {pt:{x:centX,y:centY},col:'#fff7ed',fid:'gc',ax:'c',lv:null,grad:'grad-center'},
   ];
 
   starDefs.forEach(s=>{
-    const blob=mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:'9',fill:s.col+'20',filter:`url(#${s.fid})`});
-    svg.appendChild(blob);
-    const core=mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:s.ax==='c'?'3':'4',fill:s.col});
-    core.classList.add('rstar');core.setAttribute('data-ax',s.ax);if(s.lv)core.setAttribute('data-lv',s.lv);
-    svg.appendChild(core);
-    // label
+    svg.appendChild(mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:s.ax==='c'?'13':'12',fill:s.col+'24',filter:`url(#${s.fid})`}));
+    const star=mkEl('path',{d:`M ${s.pt.x} ${s.pt.y-7} L ${s.pt.x+2.1} ${s.pt.y-2.1} L ${s.pt.x+7} ${s.pt.y} L ${s.pt.x+2.1} ${s.pt.y+2.1} L ${s.pt.x} ${s.pt.y+7} L ${s.pt.x-2.1} ${s.pt.y+2.1} L ${s.pt.x-7} ${s.pt.y} L ${s.pt.x-2.1} ${s.pt.y-2.1} Z`,fill:`url(#${s.grad})`,stroke:'rgba(255,255,255,.62)','stroke-width':'.75',filter:`url(#${s.fid})`});
+    star.classList.add('rstar');star.setAttribute('data-ax',s.ax);if(s.lv)star.setAttribute('data-lv',s.lv);
+    svg.appendChild(star);
+
     if(s.ax!=='c'){
       let tx=s.pt.x,ty=s.pt.y;
-      if(s.ax==='x'){ty+=15;}else if(s.ax==='y'){tx+=18;ty+=3;}else{tx-=12;ty+=15;}
-      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:s.col,'font-size':'9','text-anchor':'middle','font-family':'Noto Sans TC,sans-serif'},`${s.ax.toUpperCase()}${s.lv}`));
+      if(s.ax==='x'){ty+=17;}else if(s.ax==='y'){tx+=21;ty+=4;}else{tx-=15;ty+=17;}
+      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:s.col,'font-size':'10.5','text-anchor':'middle','font-family':'Noto Sans TC,sans-serif','font-weight':'500'},`${s.ax.toUpperCase()}${s.lv}`));
     } else {
-      // centroid label
-      svg.appendChild(mkEl('text',{x:centX,y:centY-12,fill:'rgba(255,255,255,.55)','font-size':'8.5','text-anchor':'middle','font-family':'Noto Serif TC,serif'},`X${r.x}/Y${r.y}/Z${r.z}`));
+      svg.appendChild(mkEl('text',{x:centX,y:centY-14,fill:'rgba(255,247,237,.76)','font-size':'9.5','text-anchor':'middle','font-family':'Noto Serif TC,serif'},`X${r.x}/Y${r.y}/Z${r.z}`));
     }
   });
 
-  // animate stars pulse
   let t2=0;
   function animStars(){
     svg.querySelectorAll('.rstar').forEach((s,i)=>{
-      const isC=s.getAttribute('data-ax')==='c';
-      const base=isC?3:4;
-      const pulse=.65+.35*Math.sin(t2*1.8+i*1.1);
-      s.setAttribute('r',base*pulse);
-      s.style.opacity=.55+.45*pulse;
+      s.style.opacity=.76+.24*Math.sin(t2*1.6+i);
     });
     t2+=0.04;
     glowRaf=requestAnimationFrame(animStars);
