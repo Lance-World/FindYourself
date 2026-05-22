@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Awareness Coordinate System</title>
+<title>覺察座標系統 3D 地圖</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -230,7 +230,7 @@ textarea:focus,input:focus{border-color:rgba(192,132,252,.36);background:rgba(25
   <button class="info-btn" onclick="openInfo()">ℹ</button>
   <div class="hd-main">AWARENESS · <em>COORDINATE</em> · SYSTEM</div>
   <div class="hd-divline"></div>
-  <div class="hd-credit">Original Idea by Lance</div>
+  <div class="hd-credit">覺察座標系統 3D 地圖 · GitHub Pages Safe Version</div>
   <div class="hd-desc">終極目標是<strong>活出自在的人生</strong>，但要先清楚現在的定位。<br>透過 X・Y・Z 三軸，看見自己在哪裡，再決定下一步怎麼走。</div>
 </div>
 <div class="divider"></div>
@@ -347,6 +347,24 @@ textarea:focus,input:focus{border-color:rgba(192,132,252,.36);background:rgba(25
 </div>
 
 <script>
+// GitHub Pages safe helpers: localStorage shim + visible error fallback
+window.storage = window.storage || {
+  async get(key){
+    const value = localStorage.getItem(key);
+    return value == null ? null : { value };
+  },
+  async set(key, value){
+    localStorage.setItem(key, value);
+    return true;
+  }
+};
+window.addEventListener('error', function(e){
+  const box = document.createElement('div');
+  box.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;padding:12px 14px;border:1px solid rgba(251,191,36,.35);border-radius:12px;background:rgba(20,14,32,.96);color:#fbbf24;font:12px/1.6 sans-serif;white-space:pre-wrap;';
+  box.textContent='頁面初始化錯誤：\n' + (e.message || 'Unknown error') + '\n\n請截圖這段訊息，或先使用本修正版 index.html 重新發布。';
+  document.body.appendChild(box);
+});
+
 const XL=['身體當下','情緒心理','個人模式','關係互動','家庭成長','社會文化','靈魂存在'];
 const YL=['單一反應','二元覺察','因果連結','探索核心','主動創造','系統整合','意義洞見'];
 const ZL=['被情緒吞沒','命名覺察','理解洞察','接納允許','主動選擇','穩定練習','轉化分享'];
@@ -543,6 +561,47 @@ function tab(id){['loc','his'].forEach(t=>{document.getElementById('tb-'+t)?.cla
 
 // ── ANALYZE ──
 let last=null;
+function clamp7(n){return Math.max(1,Math.min(7,Number(n)||1));}
+function localAnalyze(inp,note){
+  const t=(inp+' '+(note||'')).toLowerCase();
+  const has=(arr)=>arr.some(k=>t.includes(k));
+  let x=3,y=3,z=2;
+  if(has(['主管','權威','公司','職場','制度','社會','文化','工作'])) x=Math.max(x,6);
+  if(has(['家庭','父母','原生','小時候','童年'])) x=Math.max(x,5);
+  if(has(['關係','朋友','伴侶','喜歡','封鎖','衝突'])) x=Math.max(x,4);
+  if(has(['人生','意義','靈魂','存在','自由','自在'])) x=7;
+  if(has(['身體','胸口','胃','呼吸','腰','頭','睡','累','痛'])) x=Math.min(x,2);
+
+  if(has(['底層','模式','原因','為什麼','覺察','理解'])) y=Math.max(y,4);
+  if(has(['系統','循環','結構','互相影響'])) y=Math.max(y,6);
+  if(has(['意義','課題','靈魂','高我'])) y=Math.max(y,7);
+  if(has(['我想','我要','選擇','設計','行動'])) y=Math.max(y,5);
+  if(has(['爆炸','崩潰','很怕','想逃','焦慮','緊繃'])) y=Math.min(Math.max(y,2),4);
+
+  if(has(['吞沒','崩潰','爆炸','不知道','想逃','當機'])) z=1;
+  if(has(['我知道','命名','感覺是','我現在'])) z=Math.max(z,2);
+  if(has(['理解','看見','模式','因果'])) z=Math.max(z,3);
+  if(has(['接納','允許','不批判','陪自己'])) z=Math.max(z,4);
+  if(has(['行動','今天','下一步','準備','練習'])) z=Math.max(z,5);
+  if(has(['穩定','每天','習慣','持續'])) z=Math.max(z,6);
+  if(has(['分享','幫助他人','轉化'])) z=Math.max(z,7);
+
+  x=clamp7(x);y=clamp7(y);z=clamp7(z);
+  return {
+    x,y,z,
+    summary:`目前在 ${XL[x-1]} 中尋找下一步`,
+    xi:`你現在不是只在處理單一事件，而是在看見它背後牽動的「${XL[x-1]}」層級。先不用急著把整個問題一次解完，先把它縮小成今天能處理的一格。`,
+    yi:`你的視角目前接近「${YL[y-1]}」。這代表你已經不只是反應，而是開始嘗試理解自己怎麼被觸發、怎麼選擇。`,
+    zi:`整合程度落在「${ZL[z-1]}」。現在最重要的不是逼自己完美，而是讓身體和行動跟上你已經知道的事。`,
+    next:'先做一件最小行動',
+    remind:'你不用一次變好，先回到自己。',
+    sub_ext:'這個座標提醒你：不要只停在分析，也不要急著跳到巨大改變。先找到一個小到不會抗拒的行動，讓新的自己有地方開始。',
+    body_s:'先把注意力放回身體：腳踩地、慢慢吐氣、放鬆肩頸。身體安定一點，思考才不會全部擠在腦中。',
+    mind_s:'把現在的情緒命名，不急著說服自己。你可以問：我現在最怕的是什麼？我真正需要的是什麼？',
+    spirit_s:'從更大的視角看，這不是你失敗，而是你正在學會用新的方式陪自己過關。你不是卡住，你是在重新定位。'
+  };
+}
+
 async function go(){
   const inp=document.getElementById('inp').value.trim();
   const note=document.getElementById('note').value.trim();
@@ -550,37 +609,16 @@ async function go(){
   document.getElementById('btn-go').disabled=true;
   document.getElementById('loading').classList.add('on');
   document.getElementById('result').classList.remove('on');
-
-  const prompt=`你是覺察座標系統分析師。根據用戶描述輸出嚴格JSON，不加任何文字。
-
-X軸問題規模(1-7)：1身體當下 2情緒心理 3個人模式 4關係互動 5家庭成長 6社會文化 7靈魂存在
-Y軸意識維度(1-7)：1單一反應 2二元覺察 3因果連結 4探索核心 5主動創造 6系統整合 7意義洞見
-Z軸整合程度(1-7)：1被情緒吞沒 2命名覺察 3理解洞察 4接納允許 5主動選擇 6穩定練習 7轉化分享
-
-用戶輸入：「${inp}」${note?`\n備註：「${note}」`:''}
-
-JSON格式（全部必填）：
-{"x":數字,"y":數字,"z":數字,
-"summary":"一句話定位20字以內",
-"xi":"X軸洞察2-3句溫柔具體",
-"yi":"Y軸洞察2-3句",
-"zi":"Z軸洞察2-3句",
-"next":"今天唯一一個最小具體行動15字以內",
-"remind":"一句溫柔提醒真實看見非鼓勵口號20字以內",
-"sub_ext":"AI延伸思考：從這個座標出發，有什麼值得注意的模式或下一步方向？2-3句，語氣溫柔直接",
-"body_s":"身體面向建議2-3句從感官出發",
-"mind_s":"心理面向建議2-3句從情緒認知出發",
-"spirit_s":"靈性面向建議2-3句從更大視角出發"}`;
-
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
-    const d=await res.json();
-    const txt=(d.content||[]).map(c=>c.text||'').join('');
-    const r=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    // GitHub Pages 修正版：不在前端直連 Anthropic API，避免 CORS / API key / 空白頁問題。
+    const r=localAnalyze(inp,note);
     r.input=inp;r.note=note;r.ts=Date.now();last=r;showResult(r);
-  }catch(e){alert('分析失敗，請確認網路後重試。');console.error(e);}
-  finally{document.getElementById('loading').classList.remove('on');document.getElementById('btn-go').disabled=false;}
+  }catch(e){
+    alert('分析失敗：' + (e.message || e));console.error(e);
+  }finally{
+    document.getElementById('loading').classList.remove('on');
+    document.getElementById('btn-go').disabled=false;
+  }
 }
 
 function showResult(r){
