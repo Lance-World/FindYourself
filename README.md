@@ -1,94 +1,39 @@
-# 覺察座標系統 3D 地圖
+# Awareness Coordinate System
 
-這是一個可部署於 GitHub Pages 的單頁靜態網站，用於輸入當下狀態後，產生 X / Y / Z 三軸覺察定位、相近情境、身體/心理/靈性三面向建議，以及本機紀錄。
+> Original Idea by Lance
 
-## 檔案
+A self-awareness positioning tool built on three axes — X (Problem Scale), Y (Consciousness Dimension), Z (Integration Level) — to help you find your current location and take the next step toward living freely.
 
-- `awareness-v5.html`：主程式頁面，檔名維持不變。
-- `index.html`：GitHub Pages 根目錄導向頁，會自動轉到 `awareness-v5.html`。
-- `SECURITY.md`：資安與 API key 注意事項。
-- `.gitignore`：避免把金鑰、環境檔、暫存檔推上 GitHub。
+## How to Use
 
-## 重要修正
+1. Open `awareness-v5.html` in any modern browser, or deploy to GitHub Pages / Netlify / Vercel.
+2. On first use, enter your Anthropic API key when prompted (stored locally in your browser only, never sent anywhere else).
+3. Describe your current state in the text area and click **✦ 開始定位**.
 
-原始版本在 GitHub Pages 可能出現空白頁，常見原因包含：
+## Getting an API Key
 
-1. 前端直接呼叫 Anthropic API，容易遇到 CORS、API key、瀏覽器安全限制。
-2. 使用 `window.storage`，但 GitHub Pages 沒有這個物件。
-3. JavaScript 初始化階段若中斷，頁面可能只顯示空白。
+1. Go to [console.anthropic.com](https://console.anthropic.com)
+2. Sign up / log in → API Keys → Create Key
+3. Paste the key into the tool's key input field
 
-本版修正：
+## Deployment (GitHub Pages)
 
-- 改用 `localStorage` shim，相容 GitHub Pages。
-- 移除前端直連 Anthropic API。
-- 改成本機規則分析，讓網站即使沒有後端也能使用。
-- 加上錯誤提示，避免無聲失敗。
-
-## 部署方式
-
-### 方法 A：GitHub Pages 根目錄部署
-
-把以下檔案放到 repo 根目錄：
-
-```text
-awareness-v5.html
-index.html
-README.md
-SECURITY.md
-.gitignore
+```bash
+git init
+git add .
+git commit -m "init"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/awareness-coordinate.git
+git push -u origin main
 ```
 
-GitHub Pages 設定：
+Then go to repo Settings → Pages → Source: main branch → Save.
 
-- Source：Deploy from branch
-- Branch：main
-- Folder：/root
+## Privacy
 
-網站根目錄會自動導向：
+- All records are stored **locally in your browser** (localStorage). Nothing is sent to any server except the Anthropic API call itself (your input text + API key).
+- Your API key is stored in `localStorage` and never transmitted anywhere except directly to `api.anthropic.com`.
 
-```text
-https://你的帳號.github.io/你的repo/awareness-v5.html
-```
+## Disclaimer
 
-### 方法 B：只更新主頁檔案
-
-如果你已經有 GitHub Pages 架構，只要覆蓋：
-
-```text
-awareness-v5.html
-```
-
-但若希望 repo 首頁自動開啟此頁，仍建議保留 `index.html`。
-
-## AI 功能說明
-
-目前版本採用安全的本機規則分析，不需要 API key，也不會把輸入送到外部伺服器。
-
-若未來要恢復真正 AI 分析，請不要在 `awareness-v5.html` 內放 API key。建議架構是：
-
-```text
-Browser → Serverless Function / Backend Proxy → AI API
-```
-
-可選方案：
-
-- Cloudflare Workers
-- Vercel Serverless Functions
-- Netlify Functions
-- 自架 Node.js / Python API
-
-前端只呼叫你自己的後端 endpoint，API key 放在後端環境變數。
-
-## 本機測試
-
-建議不要直接雙擊 HTML，而是用 local server：
-
-```powershell
-python -m http.server 8000
-```
-
-再開啟：
-
-```text
-http://localhost:8000/awareness-v5.html
-```
+This tool is for self-awareness purposes only and is **not related to any form of psychological counseling, medical diagnosis, or professional advice**.
