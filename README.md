@@ -1,15 +1,33 @@
-# Awareness Coordinate System｜Hybrid Mobile Version
+# Awareness Coordinate System｜Hybrid Mobile Version v2
 
 > Original Idea by Lance
 
-這是一套手機友善的覺察座標工具：
+這是一套手機友善的覺察座標工具。新版依照「夢幻星空、柔和紫粉藍、玻璃卡片」方向重整版面，並把結果改成三張主要卡片：
+
+```text
+1. XYZ 綜合定位卡
+2. 身心靈整合卡
+3. AI 延伸輔助卡
+```
+
+核心架構仍然是：
 
 ```text
 GitHub Pages 前端
 → 本機規則立即判斷 X / Y / Z
 → Serverless AI 後端只負責文字整合
-→ AI 失敗時仍保留本機結果
+→ AI 失敗或未設定時仍保留本機結果
 ```
+
+## 本版重點
+
+- XYZ 不再分散成多張小卡，而是合併成一張「XYZ 綜合定位卡」。
+- 身體、心理、高我提醒整合成一張「身心靈整合卡」。
+- AI 狀態改為「AI 輔助可選」，未設定時不視為錯誤。
+- AI 延伸輔助固定是一張卡；未設定時會顯示設定提示。
+- 座標 SVG 已加上內框，X / Y / Z 軸與標籤都收在框架內。
+- 配色改為夢幻星空、紫粉、淺藍、暖金、柔綠的玻璃擬態風格。
+- Service Worker cache 已升級為 `awareness-hybrid-mobile-v2`，避免手機載到舊 CSS / JS。
 
 ## 檔案結構
 
@@ -56,7 +74,7 @@ http://localhost:8000
 ```powershell
 git init
 git add .
-git commit -m "init awareness hybrid mobile"
+git commit -m "update awareness hybrid mobile v2"
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
 git push -u origin main
@@ -66,6 +84,12 @@ git push -u origin main
 
 ```text
 Settings → Pages → Deploy from branch → main / root → Save
+```
+
+若手機仍看到舊版，請清除瀏覽器快取，或在網址後面加：
+
+```text
+?v=2
 ```
 
 ## AI 後端方案 A：Cloudflare Worker
@@ -121,53 +145,9 @@ ALLOWED_ORIGIN = https://YOUR_USERNAME.github.io
 https://your-vercel-project.vercel.app/api/analyze
 ```
 
-## 設計原則
-
-### 1. 本機先判斷
-
-手機端立即產生：
-
-```text
-X 軸：問題規模
-Y 軸：意識維度
-Z 軸：整合程度
-主卡片
-相近位置
-身體 / 心理 / 高我提醒
-```
-
-### 2. AI 只做文字整合
-
-AI 不主控整個結果，只根據本機結果補充：
-
-```json
-{
-  "summary": "...",
-  "coordinate_reason": {
-    "x": "...",
-    "y": "...",
-    "z": "..."
-  },
-  "suggestions": ["...", "...", "..."],
-  "higher_self": "...",
-  "caution": "..."
-}
-```
-
-### 3. AI 失敗不影響使用
-
-若 Serverless API、CORS 或 AI Provider 出錯，前端仍顯示本機結果。
-
-## 手機安裝成 App
-
-在手機瀏覽器打開 GitHub Pages 網址：
-
-- iPhone Safari：分享 → 加入主畫面
-- Android Chrome：選單 → 加到主畫面
-
 ## 隱私
 
-- 使用者輸入會在本機規則中處理。
+- 使用者輸入會先在本機規則中處理。
 - 若有設定 AI 後端，輸入內容與本機座標會送到你的 Serverless Function，再送到 AI Provider。
 - 歷史紀錄只存在瀏覽器 localStorage。
 - API key 不放在前端。

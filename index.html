@@ -17,10 +17,10 @@
       <button class="icon-btn hero-info" id="openInfoBtn" type="button" aria-label="說明">ⓘ</button>
       <p class="eyebrow">AWARENESS · COORDINATE · SYSTEM</p>
       <h1>覺察座標系統</h1>
-      <p class="hero-copy">先看見自己在哪裡，再選擇下一步怎麼走。手機可用，本機先判斷，AI 只做文字整合。</p>
+      <p class="hero-copy">先看見自己在哪裡，再往前移動一格。手機可用，本機先定位，AI 只負責延伸整合。</p>
       <div class="status-row">
         <span class="status-pill local">本機規則可用</span>
-        <span class="status-pill" id="aiStatus">AI 未設定</span>
+        <span class="status-pill" id="aiStatus">AI 輔助可選</span>
       </div>
     </header>
 
@@ -54,7 +54,7 @@
         </div>
         <button class="ghost-btn" id="resetBtn" type="button">重置</button>
       </div>
-      <svg id="coordSvg" viewBox="0 0 380 310" role="img" aria-label="X Y Z 覺察座標圖"></svg>
+      <div class="coord-frame"><svg id="coordSvg" viewBox="0 0 380 360" role="img" aria-label="X Y Z 覺察座標圖"></svg></div>
       <p class="coord-hint" id="coordHint">輸入後，X / Y / Z 三軸位置會亮起。</p>
     </section>
 
@@ -67,11 +67,12 @@
         <button class="ghost-btn" id="saveBtn" type="button">儲存</button>
       </div>
 
-      <div class="axis-chips" id="axisChips"></div>
-      <article class="main-result" id="mainResult"></article>
-      <div class="insight-grid" id="insightGrid"></div>
-      <div class="ai-box" id="aiBox" hidden></div>
-      <div class="neighbor-box" id="neighborBox"></div>
+      <div class="result-stack">
+        <article class="result-card xyz-card" id="mainResult"></article>
+        <article class="result-card spirit-card" id="insightGrid"></article>
+        <article class="result-card ai-card" id="aiBox"></article>
+        <article class="result-card neighbor-box" id="neighborBox"></article>
+      </div>
     </section>
 
     <section class="panel history-panel" aria-labelledby="historyTitle">
