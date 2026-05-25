@@ -3,288 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Awareness Coordinate System</title>
+<title>覺察座標系統 3D 地圖</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg1:#07051a;--bg2:#100d26;
+  --bg1:#0a0716;--bg2:#120e24;
   --px:#c084fc;--py:#f472b6;--pz:#34d399;--gold:#fbbf24;--lav:#a78bfa;
-  --px-a:rgba(192,132,252,.14);--py-a:rgba(244,114,182,.14);--pz-a:rgba(52,211,153,.14);
-  --fg:rgba(255,255,255,.92);--fg2:rgba(255,255,255,.62);--fg3:rgba(255,255,255,.32);
-  --br:rgba(255,255,255,.08);--br2:rgba(255,255,255,.18);
-  --card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.08);
-  --fs-xs:12px;--fs-sm:14px;--fs-base:15px;--fs-md:16px;--fs-lg:18px;--fs-xl:20px;
+  --px-a:rgba(192,132,252,.13);--py-a:rgba(244,114,182,.13);--pz-a:rgba(52,211,153,.13);
+  --fg:rgba(255,255,255,.9);--fg2:rgba(255,255,255,.58);--fg3:rgba(255,255,255,.28);
+  --br:rgba(255,255,255,.07);--br2:rgba(255,255,255,.16);
+  --card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.07);
 }
 html,body{min-height:100vh;overflow-x:hidden}
-body{background:var(--bg1);color:var(--fg);font-family:'Noto Sans TC',sans-serif;font-weight:300;font-size:var(--fs-base)}
+body{background:var(--bg1);color:var(--fg);font-family:'Noto Sans TC',sans-serif;font-weight:300}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 70% 60% at 10% 20%,rgba(120,60,255,.22) 0%,transparent 60%),
-    radial-gradient(ellipse 55% 50% at 90% 10%,rgba(244,114,182,.16) 0%,transparent 55%),
-    radial-gradient(ellipse 80% 70% at 50% 95%,rgba(52,211,153,.09) 0%,transparent 60%),
-    linear-gradient(160deg,#07051a 0%,#0e0a20 40%,#0a0f1e 70%,#07051a 100%)}
+    radial-gradient(ellipse 65% 55% at 15% 25%,rgba(139,92,246,.2) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 45% at 85% 15%,rgba(244,114,182,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 75% 65% at 50% 90%,rgba(52,211,153,.08) 0%,transparent 60%),
+    linear-gradient(160deg,#0a0716 0%,#120e24 45%,#0e1422 70%,#0a0716 100%)}
 canvas#bgc{position:fixed;inset:0;z-index:0;pointer-events:none}
-.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 96px}
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 88px}
 
 /* ── HEADER ── */
-.hd{padding:38px 20px 20px;text-align:center;position:relative}
-.hd-main{font-family:'Noto Serif TC',serif;font-size:clamp(14px,4vw,17px);font-weight:300;letter-spacing:.22em;color:var(--fg);margin-bottom:8px;text-transform:uppercase;line-height:1.5}
+.hd{padding:36px 20px 20px;text-align:center;position:relative}
+.hd-main{font-family:'Noto Serif TC',serif;font-size:clamp(13px,4vw,16px);font-weight:300;letter-spacing:.22em;color:var(--fg);margin-bottom:6px;text-transform:uppercase}
 .hd-main em{color:var(--px);font-style:normal}
-.hd-divline{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--px),transparent);margin:10px auto;opacity:.55}
-.hd-credit{font-size:var(--fs-xs);color:var(--fg3);letter-spacing:.14em;margin-bottom:14px}
-.hd-desc{font-size:var(--fs-sm);color:var(--fg3);line-height:1.85;padding:11px 16px;border:1px solid var(--br);border-radius:12px;background:var(--card);text-align:left}
-.hd-desc strong{color:rgba(255,255,255,.72);font-weight:400}
-.info-btn{position:absolute;top:38px;right:20px;width:34px;height:34px;border-radius:50%;background:var(--px-a);border:1px solid rgba(192,132,252,.28);color:var(--px);font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
-.info-btn:hover{background:rgba(192,132,252,.24)}
+.hd-divline{width:48px;height:1px;background:linear-gradient(90deg,transparent,var(--px),transparent);margin:10px auto;opacity:.6}
+.hd-credit{font-size:10px;color:var(--fg3);letter-spacing:.12em;margin-bottom:12px}
+.hd-desc{font-size:11px;color:var(--fg3);line-height:1.8;padding:10px 16px;border:1px solid var(--br);border-radius:10px;background:var(--card);text-align:left}
+.hd-desc strong{color:rgba(255,255,255,.7);font-weight:400}
+.info-btn{position:absolute;top:36px;right:20px;width:32px;height:32px;border-radius:50%;background:var(--px-a);border:1px solid rgba(192,132,252,.25);color:var(--px);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.info-btn:hover{background:rgba(192,132,252,.22)}
 
-/* ── AUTH BANNER ── */
-.auth-bar{margin:14px 20px 0;padding:12px 16px;border-radius:12px;font-size:var(--fs-xs);line-height:1.7}
-.auth-bar.need{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);color:rgba(251,191,36,.75)}
-.auth-bar.need a{color:var(--gold);text-decoration:underline}
-.auth-bar.ok{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);color:rgba(52,211,153,.85)}
-.auth-bar.hide{display:none}
-/* auth bar */
-.auth-bar{margin:14px 20px 0;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--br)}
-.auth-desc{font-size:var(--fs-xs);color:var(--fg3);line-height:1.7;margin-bottom:10px}
-.auth-note{opacity:.7;font-size:11px}
-.google-sign-btn{display:flex;align-items:center;gap:9px;padding:10px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:10px;color:var(--fg);font-size:var(--fs-sm);cursor:pointer;transition:.15s;font-family:'Noto Sans TC',sans-serif;letter-spacing:.03em}
-.google-sign-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25)}
-.google-sign-btn:active{transform:scale(.97)}
-.auth-user-row{display:flex;align-items:center;gap:10px}
-.auth-avatar{width:32px;height:32px;border-radius:50%;border:1px solid var(--br2);flex-shrink:0}
-.auth-user-info{flex:1}
-.auth-name{font-size:var(--fs-sm);color:var(--fg);margin-bottom:2px}
-.auth-signout-btn{background:none;border:1px solid var(--br);border-radius:8px;color:var(--fg3);font-size:var(--fs-xs);padding:5px 10px;cursor:pointer;transition:.15s;font-family:'Noto Sans TC',sans-serif}
-.auth-signout-btn:hover{border-color:var(--br2);color:var(--fg2)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--br2),transparent);margin:0 20px}
 
-.divider{height:1px;background:linear-gradient(90deg,transparent,var(--br2),transparent);margin:16px 20px 0}
+/* ── TABS ── */
 .tabs{display:flex;border-bottom:1px solid var(--br);margin:0 20px}
-.tb{flex:1;padding:13px 0;background:none;border:none;color:var(--fg3);font-size:var(--fs-sm);cursor:pointer;position:relative;letter-spacing:.06em;font-family:'Noto Sans TC',sans-serif;transition:.2s}
+.tb{flex:1;padding:11px 0;background:none;border:none;color:var(--fg3);font-size:12px;cursor:pointer;position:relative;letter-spacing:.06em;font-family:'Noto Sans TC',sans-serif;transition:.2s}
 .tb.on{color:var(--fg)}
 .tb.on::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:1px;background:linear-gradient(90deg,var(--px),var(--py))}
-.sec{display:none;padding:22px 20px 0}
+.sec{display:none;padding:20px 20px 0}
 .sec.on{display:block}
 
 /* ── COORD DIAGRAM ── */
-.coord-wrap{width:100%;margin-bottom:10px;border-radius:16px;overflow:visible;background:transparent}
-#coord-svg{width:100%;display:block;overflow:visible}
-.coord-hint{text-align:center;font-size:var(--fs-xs);color:var(--fg3);letter-spacing:.08em;margin-bottom:18px}
-@keyframes tw{0%,100%{opacity:.3}55%{opacity:.88}}
+.coord-wrap{width:100%;position:relative;margin-bottom:8px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:
+  radial-gradient(circle at 50% 78%,rgba(251,191,36,.16),transparent 23%),
+  radial-gradient(circle at 50% 44%,rgba(52,211,153,.12),transparent 30%),
+  radial-gradient(circle at 24% 28%,rgba(192,132,252,.18),transparent 38%),
+  radial-gradient(circle at 80% 24%,rgba(244,114,182,.14),transparent 36%),
+  linear-gradient(160deg,rgba(18,14,36,.92),rgba(10,7,22,.97));box-shadow:inset 0 0 42px rgba(192,132,252,.08)}
+#coord-svg{width:100%;display:block}
+.coord-hint{text-align:center;font-size:11px;color:var(--fg3);letter-spacing:.07em;margin-bottom:16px}
+@keyframes tw{0%,100%{opacity:.3}55%{opacity:.9}}
 .coord-hint{animation:tw 3.5s ease-in-out infinite}
 
 /* ── INPUT ── */
-.fl{margin-bottom:11px}
-.fl-lbl{font-size:var(--fs-xs);color:var(--fg3);letter-spacing:.06em;margin-bottom:6px}
-textarea{width:100%;background:var(--card);border:1px solid var(--br);border-radius:12px;color:var(--fg);font-size:var(--fs-base);font-weight:300;line-height:1.75;padding:14px 16px;outline:none;transition:.15s;caret-color:var(--px);font-family:'Noto Sans TC',sans-serif;resize:none;min-height:108px}
-input[type=text]{width:100%;background:var(--card);border:1px solid var(--br);border-radius:12px;color:var(--fg);font-size:var(--fs-base);font-weight:300;padding:13px 16px;outline:none;transition:.15s;caret-color:var(--px);font-family:'Noto Sans TC',sans-serif}
-textarea::placeholder,input[type=text]::placeholder{color:var(--fg3)}
-textarea:focus,input[type=text]:focus{border-color:rgba(192,132,252,.4);background:rgba(255,255,255,.055)}
-.btn-go{width:100%;margin-top:4px;padding:16px;background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(244,114,182,.18));border:1px solid rgba(192,132,252,.3);border-radius:12px;color:var(--fg);font-size:var(--fs-md);letter-spacing:.14em;cursor:pointer;transition:.2s;font-family:'Noto Serif TC',serif;font-weight:300}
-.btn-go:hover{background:linear-gradient(135deg,rgba(192,132,252,.3),rgba(244,114,182,.26))}
+.fl{margin-bottom:9px}
+.fl-lbl{font-size:11px;color:var(--fg3);letter-spacing:.06em;margin-bottom:5px}
+textarea{width:100%;background:var(--card);border:1px solid var(--br);border-radius:10px;color:var(--fg);font-size:14px;font-weight:300;line-height:1.75;padding:12px 14px;outline:none;transition:.15s;caret-color:var(--px);font-family:'Noto Sans TC',sans-serif;resize:none;min-height:100px}
+input[type=text]{width:100%;background:var(--card);border:1px solid var(--br);border-radius:10px;color:var(--fg);font-size:14px;font-weight:300;padding:11px 14px;outline:none;transition:.15s;caret-color:var(--px);font-family:'Noto Sans TC',sans-serif}
+textarea::placeholder,input::placeholder{color:var(--fg3)}
+textarea:focus,input:focus{border-color:rgba(192,132,252,.36);background:rgba(255,255,255,.05)}
+.btn-go{width:100%;margin-top:2px;padding:14px;background:linear-gradient(135deg,rgba(192,132,252,.18),rgba(244,114,182,.16));border:1px solid rgba(192,132,252,.28);border-radius:10px;color:var(--fg);font-size:14px;letter-spacing:.12em;cursor:pointer;transition:.2s;font-family:'Noto Serif TC',serif;font-weight:300}
+.btn-go:hover{background:linear-gradient(135deg,rgba(192,132,252,.26),rgba(244,114,182,.22))}
 .btn-go:active{transform:scale(.98)}
-.btn-go:disabled{opacity:.3;cursor:not-allowed}
+.btn-go:disabled{opacity:.32;cursor:not-allowed}
 
-.loading{display:none;text-align:center;padding:28px;color:var(--fg3);font-size:var(--fs-sm);letter-spacing:.06em}
+/* ── LOADING ── */
+.loading{display:none;text-align:center;padding:26px;color:var(--fg3);font-size:12px;letter-spacing:.06em}
 .loading.on{display:block}
-.ld{display:inline-block;width:6px;height:6px;border-radius:50%;margin:0 3px;animation:ldp 1.2s ease-in-out infinite}
+.ld{display:inline-block;width:5px;height:5px;border-radius:50%;margin:0 2px;animation:ldp 1.2s ease-in-out infinite}
 .ld:nth-child(1){background:var(--px)}.ld:nth-child(2){background:var(--py);animation-delay:.2s}.ld:nth-child(3){background:var(--pz);animation-delay:.4s}
 @keyframes ldp{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
 
 /* ── RESULT ── */
 .result{display:none;padding:0 20px}
 .result.on{display:block}
-.axis-row{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap}
-.ax-chip{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:100px;font-size:var(--fs-sm);font-family:'Noto Serif TC',serif;border:1px solid}
-.ax-chip strong{font-weight:400}
-.ax-chip.xc{background:var(--px-a);border-color:rgba(192,132,252,.32);color:var(--px)}
-.ax-chip.yc{background:var(--py-a);border-color:rgba(244,114,182,.32);color:var(--py)}
-.ax-chip.zc{background:var(--pz-a);border-color:rgba(52,211,153,.32);color:var(--pz)}
-.ax-chip-sub{font-size:11px;opacity:.7;font-family:'Noto Sans TC',sans-serif}
 
-/* ── MAIN CARD (from cards_db) ── */
-.main-card{border-radius:18px;overflow:hidden;margin-bottom:12px;border:1px solid rgba(192,132,252,.22);background:linear-gradient(145deg,rgba(192,132,252,.1),rgba(244,114,182,.055))}
-.main-card-hd{padding:20px 18px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:14px}
-.card-coord-badge{font-family:'Noto Serif TC',serif;font-size:12px;padding:3px 10px;background:rgba(255,255,255,.06);border:1px solid var(--br2);border-radius:100px;white-space:nowrap;flex-shrink:0;margin-top:2px}
-.main-card-title-wrap{flex:1}
-.main-card-label{font-size:11px;letter-spacing:.13em;color:var(--px);margin-bottom:5px}
-.main-card-name{font-family:'Noto Serif TC',serif;font-size:var(--fs-xl);font-weight:300;margin-bottom:5px;line-height:1.2}
-.main-card-cue{font-size:var(--fs-xs);color:var(--fg3);line-height:1.6}
-.main-card-arr{font-size:12px;color:var(--fg3);margin-top:5px;transition:.2s;flex-shrink:0}
-.main-card.open .main-card-arr{transform:rotate(180deg)}
-.main-card-body{display:none;padding:0 18px 18px;border-top:1px solid rgba(255,255,255,.07)}
-.main-card.open .main-card-body{display:block}
+.axis-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.ax-chip{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;font-size:12px;font-family:'Noto Serif TC',serif;border:1px solid}
+.ax-chip.xc{background:var(--px-a);border-color:rgba(192,132,252,.3);color:var(--px)}
+.ax-chip.yc{background:var(--py-a);border-color:rgba(244,114,182,.3);color:var(--py)}
+.ax-chip.zc{background:var(--pz-a);border-color:rgba(52,211,153,.3);color:var(--pz)}
+.ax-chip-sub{font-size:10px;opacity:.7;font-family:'Noto Sans TC',sans-serif}
 
-/* insight tabs inside card */
-.insight-tabs{display:flex;gap:0;border:1px solid var(--br);border-radius:10px;overflow:hidden;margin:14px 0 10px}
-.itab{flex:1;padding:9px 4px;background:none;border:none;color:var(--fg3);font-size:var(--fs-sm);cursor:pointer;transition:.15s;font-family:'Noto Sans TC',sans-serif;text-align:center;letter-spacing:.02em}
+/* ── MAIN SITUATION CARD ── */
+.sit-card{border-radius:16px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(192,132,252,.22);background:linear-gradient(145deg,rgba(192,132,252,.09),rgba(244,114,182,.05))}
+.sit-card-hd{padding:18px 18px 14px;cursor:pointer;display:flex;align-items:flex-start;gap:13px}
+.sit-emoji{font-size:26px;line-height:1;flex-shrink:0;margin-top:2px}
+.sit-hd-r{flex:1}
+.sit-label{font-size:10px;letter-spacing:.12em;color:var(--px);margin-bottom:4px}
+.sit-name{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:300;margin-bottom:4px;line-height:1.2}
+.sit-match{font-size:11px;color:var(--fg3)}
+.sit-arr{font-size:11px;color:var(--fg3);margin-top:4px;transition:.2s;flex-shrink:0}
+.sit-card.open .sit-arr{transform:rotate(180deg)}
+.sit-body{display:none;padding:0 18px 18px;border-top:1px solid rgba(255,255,255,.07)}
+.sit-card.open .sit-body{display:block}
+.sit-desc{font-size:13px;color:var(--fg2);line-height:1.85;font-weight:300;margin:14px 0 14px}
+.insight-tabs{display:flex;gap:0;border:1px solid var(--br);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.itab{flex:1;padding:8px 4px;background:none;border:none;color:var(--fg3);font-size:11px;cursor:pointer;transition:.15s;font-family:'Noto Sans TC',sans-serif;text-align:center;letter-spacing:.02em}
 .itab.on{color:var(--fg);background:rgba(255,255,255,.07)}
 .insight-panel{display:none}.insight-panel.on{display:block}
-.insight-note{padding:8px 12px;font-size:var(--fs-sm);line-height:1.6;border-left:2px solid;margin-bottom:9px;border-radius:0 6px 6px 0}
+.insight-note{padding:7px 11px;font-size:12px;line-height:1.55;border-left:2px solid;margin-bottom:8px}
 .in-x{background:var(--px-a);border-color:var(--px);color:rgba(192,132,252,.9)}
 .in-y{background:var(--py-a);border-color:var(--py);color:rgba(244,114,182,.9)}
 .in-z{background:var(--pz-a);border-color:var(--pz);color:rgba(52,211,153,.9)}
-.insight-text{font-size:var(--fs-sm);color:var(--fg2);line-height:1.9;font-weight:300;padding-bottom:10px}
-/* card insight from db */
-.card-insight-box{font-size:var(--fs-sm);color:var(--fg2);line-height:1.9;font-weight:300;padding:12px 0 10px}
-/* today action */
-.today-box{padding:13px 15px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:12px;font-size:var(--fs-sm);color:var(--gold);line-height:1.7;margin-bottom:9px}
+.insight-text{font-size:13px;color:var(--fg2);line-height:1.85;font-weight:300;padding-bottom:10px}
+.today-box{padding:12px 14px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.18);border-radius:10px;font-size:13px;color:var(--gold);line-height:1.65;margin-bottom:8px}
 .today-box::before{content:'今天 → ';opacity:.7}
-.today-remind{font-size:var(--fs-xs);color:var(--fg3);line-height:1.7;font-style:italic}
+.today-remind{font-size:12px;color:var(--fg3);line-height:1.65;font-style:italic}
 
-/* sub tags */
-.sub-wrap{margin-bottom:16px}
-.sub-lbl{font-size:11px;letter-spacing:.1em;color:var(--fg3);margin-bottom:8px}
-.sub-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.sub-tag{padding:6px 13px;border-radius:100px;background:var(--card);border:1px solid var(--br);font-size:var(--fs-sm);color:var(--fg3);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:5px}
+/* sub tag */
+.sub-wrap{margin-bottom:14px}
+.sub-lbl{font-size:10px;letter-spacing:.1em;color:var(--fg3);margin-bottom:7px}
+.sub-tags{display:flex;gap:6px;flex-wrap:wrap}
+.sub-tag{padding:5px 12px;border-radius:100px;background:var(--card);border:1px solid var(--br);font-size:12px;color:var(--fg3);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:5px}
 .sub-tag:hover{background:var(--card2);color:var(--fg2);border-color:var(--br2)}
-.sub-tag-score{font-size:11px;opacity:.55}
-.sub-extended{padding:13px 15px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.16);border-radius:12px;font-size:var(--fs-sm);color:rgba(167,139,250,.88);line-height:1.85}
-.sub-extended-lbl{font-size:11px;letter-spacing:.1em;color:var(--lav);margin-bottom:7px;opacity:.82}
+.sub-tag-score{font-size:10px;opacity:.55}
+/* sub extended (AI思考) */
+.sub-extended{margin-top:10px;padding:12px 14px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.15);border-radius:10px;font-size:12px;color:rgba(167,139,250,.85);line-height:1.75}
+.sub-extended-lbl{font-size:10px;letter-spacing:.1em;color:var(--lav);margin-bottom:6px;opacity:.8}
 
 /* 身心靈 */
-.sg-title{font-size:11px;letter-spacing:.1em;color:var(--fg3);margin:6px 0 10px}
-.sg-row{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
-.sgc{background:var(--card);border:1px solid var(--br);border-radius:14px;overflow:hidden;cursor:pointer;transition:.15s}
+.sg-title{font-size:10px;letter-spacing:.1em;color:var(--fg3);margin:4px 0 8px}
+.sg-row{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.sgc{background:var(--card);border:1px solid var(--br);border-radius:12px;overflow:hidden;cursor:pointer;transition:.15s}
 .sgc:hover{background:var(--card2)}
-.sgc-hd{display:flex;align-items:center;gap:10px;padding:14px 16px}
-.sg-ico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.sgc-ttl{font-size:var(--fs-base);color:var(--fg2);flex:1}
-.sgc-arr{font-size:11px;color:var(--fg3);transition:.2s}
+.sgc-hd{display:flex;align-items:center;gap:9px;padding:12px 14px}
+.sg-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.sgc-ttl{font-size:13px;color:var(--fg2);flex:1}
+.sgc-arr{font-size:10px;color:var(--fg3);transition:.2s}
 .sgc.open .sgc-arr{transform:rotate(180deg)}
-.sgc-body{display:none;padding:0 16px 14px;border-top:1px solid var(--br)}
+.sgc-body{display:none;padding:0 14px 12px;border-top:1px solid var(--br)}
 .sgc.open .sgc-body{display:block}
-.sgc-body p{font-size:var(--fs-sm);color:var(--fg2);line-height:1.9;font-weight:300;padding-top:12px}
+.sgc-body p{font-size:13px;color:var(--fg2);line-height:1.85;font-weight:300;padding-top:10px}
 
-.btn-g{width:100%;padding:13px;background:none;border:1px solid var(--br);border-radius:12px;color:var(--fg3);font-size:var(--fs-sm);cursor:pointer;transition:.15s;font-family:'Noto Sans TC',sans-serif;letter-spacing:.05em;margin-top:7px}
+.btn-g{width:100%;padding:11px;background:none;border:1px solid var(--br);border-radius:10px;color:var(--fg3);font-size:12px;cursor:pointer;transition:.15s;font-family:'Noto Sans TC',sans-serif;letter-spacing:.05em;margin-top:6px}
 .btn-g:hover{border-color:var(--br2);color:var(--fg2)}
 
 /* ── HISTORY ── */
-.hist-empty{text-align:center;padding:52px 0;color:var(--fg3);font-size:var(--fs-sm);line-height:1.9}
-.hl{display:flex;flex-direction:column;gap:10px}
-.hi{background:var(--card);border:1px solid var(--br);border-radius:14px;padding:15px 16px;cursor:pointer;transition:.15s}
+.hist-empty{text-align:center;padding:48px 0;color:var(--fg3);font-size:13px;line-height:1.9}
+.hl{display:flex;flex-direction:column;gap:9px}
+.hi{background:var(--card);border:1px solid var(--br);border-radius:12px;padding:13px 15px;cursor:pointer;transition:.15s}
 .hi:hover{background:var(--card2)}
-.hi-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.hi-date{font-size:var(--fs-xs);color:var(--fg3)}
-.hi-coords{display:flex;gap:6px;font-size:var(--fs-sm);font-family:'Noto Serif TC',serif;align-items:center}
-.hi-del{background:none;border:none;color:var(--fg3);font-size:16px;cursor:pointer;padding:0 3px;line-height:1;transition:.15s}
+.hi-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.hi-date{font-size:11px;color:var(--fg3)}
+.hi-coords{display:flex;gap:5px;font-size:12px;font-family:'Noto Serif TC',serif;align-items:center}
+.hi-del{background:none;border:none;color:var(--fg3);font-size:14px;cursor:pointer;padding:0 3px;line-height:1;transition:.15s}
 .hi-del:hover{color:#f87171}
-.hi-txt{font-size:var(--fs-sm);color:var(--fg3);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.hi-note{font-size:var(--fs-xs);color:var(--fg3);margin-top:4px;font-style:italic;opacity:.62}
-.bx{color:var(--px)}.by{color:var(--py)}.bz{color:var(--pz)}
+.hi-txt{font-size:12px;color:var(--fg3);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hi-note{font-size:11px;color:var(--fg3);margin-top:3px;font-style:italic;opacity:.6}
+.bx{color:var(--px)}.by{color:var(--py)}.bz{color:var(--pz)}.sep{color:var(--fg3);font-size:10px}
 
 /* ── INFO MODAL ── */
-.modal-wrap{display:none;position:fixed;inset:0;z-index:200;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.68);backdrop-filter:blur(7px)}
+.modal-wrap{display:none;position:fixed;inset:0;z-index:200;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(6px)}
 .modal-wrap.on{display:flex}
-.modal{background:linear-gradient(160deg,#1a1240,#100d26);border:1px solid var(--br2);border-radius:24px 24px 0 0;padding:24px 20px 44px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal{background:linear-gradient(160deg,#1c1540,#130f28);border:1px solid var(--br2);border-radius:24px 24px 0 0;padding:22px 20px 40px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto}
 @keyframes sUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-wrap.on .modal{animation:sUp .28s cubic-bezier(.16,1,.3,1)}
-.mpill{width:36px;height:4px;background:var(--br2);border-radius:2px;margin:0 auto 20px}
-.mttl{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:300;letter-spacing:.08em;margin-bottom:6px;text-align:center}
-.m-sub{font-size:var(--fs-sm);color:var(--fg3);text-align:center;margin-bottom:22px;line-height:1.75}
-.ax-sec{margin-bottom:26px}
-.ax-sec-hd{display:flex;align-items:center;gap:9px;margin-bottom:10px}
-.ax-bdg{padding:4px 12px;border-radius:100px;font-size:12px;font-family:'Noto Serif TC',serif;letter-spacing:.04em}
-.abx{background:var(--px-a);color:var(--px);border:1px solid rgba(192,132,252,.22)}
-.aby{background:var(--py-a);color:var(--py);border:1px solid rgba(244,114,182,.22)}
-.abz{background:var(--pz-a);color:var(--pz);border:1px solid rgba(52,211,153,.22)}
-.ax-sub{font-size:var(--fs-xs);color:var(--fg3)}
-.ax-desc{font-size:var(--fs-sm);color:var(--fg3);line-height:1.8;margin-bottom:13px}
-.x-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:var(--fs-xs)}
-.x-table th{text-align:left;padding:7px 8px;color:var(--fg3);font-weight:400;border-bottom:1px solid var(--br);letter-spacing:.04em}
-.x-table td{padding:8px 8px;border-bottom:1px solid var(--br);color:var(--fg3);line-height:1.6;vertical-align:top}
+.mpill{width:34px;height:4px;background:var(--br2);border-radius:2px;margin:0 auto 18px}
+.mttl{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:300;letter-spacing:.08em;margin-bottom:6px;text-align:center}
+.m-sub{font-size:11px;color:var(--fg3);text-align:center;margin-bottom:20px;line-height:1.7}
+.ax-sec{margin-bottom:24px}
+.ax-sec-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ax-bdg{padding:3px 10px;border-radius:100px;font-size:11px;font-family:'Noto Serif TC',serif;letter-spacing:.04em}
+.abx{background:var(--px-a);color:var(--px);border:1px solid rgba(192,132,252,.2)}
+.aby{background:var(--py-a);color:var(--py);border:1px solid rgba(244,114,182,.2)}
+.abz{background:var(--pz-a);color:var(--pz);border:1px solid rgba(52,211,153,.2)}
+.ax-sub{font-size:11px;color:var(--fg3)}
+.ax-desc{font-size:12px;color:var(--fg3);line-height:1.75;margin-bottom:12px}
+.lvl-list{display:flex;flex-direction:column;gap:4px}
+.lvl{display:flex;gap:9px;padding:8px 10px;background:var(--card);border-radius:8px;align-items:flex-start}
+.lvl-n{font-family:'Noto Serif TC',serif;font-size:12px;width:14px;flex-shrink:0;margin-top:1px}
+.lvl-x .lvl-n{color:var(--px)}.lvl-y .lvl-n{color:var(--py)}.lvl-z .lvl-n{color:var(--pz)}
+.lvl-nm{font-size:12px;font-weight:400;margin-bottom:2px}
+.lvl-ds{font-size:11px;color:var(--fg3);line-height:1.55}
+.lvl-ex{font-size:11px;color:var(--fg3);opacity:.65;margin-top:2px;font-style:italic}
+/* step list for Z */
+.step-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.step{padding:10px 12px;background:var(--card);border-radius:9px;border-left:2px solid var(--pz)}
+.step-n{font-size:10px;letter-spacing:.1em;color:var(--pz);margin-bottom:4px}
+.step-ttl{font-size:12px;font-weight:400;margin-bottom:4px}
+.step-body{font-size:11px;color:var(--fg3);line-height:1.65}
+/* x table */
+.x-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}
+.x-table th{text-align:left;padding:6px 8px;color:var(--fg3);font-weight:400;border-bottom:1px solid var(--br);letter-spacing:.04em}
+.x-table td{padding:7px 8px;border-bottom:1px solid var(--br);color:var(--fg3);line-height:1.55;vertical-align:top}
 .x-table td:first-child{color:var(--px);font-weight:400;white-space:nowrap}
-.dim-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.dim{padding:10px 13px;background:var(--card);border-radius:10px;border-left:2px solid var(--py)}
-.dim-n{font-size:11px;color:var(--py);letter-spacing:.06em;margin-bottom:4px}
-.dim-body{font-size:var(--fs-xs);color:var(--fg3);line-height:1.65}
-.step-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
-.step{padding:11px 13px;background:var(--card);border-radius:10px;border-left:2px solid var(--pz)}
-.step-n{font-size:11px;letter-spacing:.1em;color:var(--pz);margin-bottom:4px}
-.step-ttl{font-size:var(--fs-sm);font-weight:400;margin-bottom:5px}
-.step-body{font-size:var(--fs-xs);color:var(--fg3);line-height:1.7}
-.disc{margin-top:20px;padding:14px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);border-radius:14px}
-.disc-hd{display:flex;align-items:center;gap:9px;margin-bottom:9px}
-.warn-ico{width:28px;height:28px;border-radius:50%;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold);font-weight:700;flex-shrink:0}
-.disc-ttl{font-size:var(--fs-sm);color:var(--gold)}
-.disc-body{font-size:var(--fs-xs);color:rgba(251,191,36,.58);line-height:1.8}
-.m-close{width:100%;padding:13px;background:rgba(255,255,255,.06);border:1px solid var(--br);border-radius:10px;color:var(--fg2);font-size:var(--fs-sm);cursor:pointer;margin-top:20px;font-family:'Noto Sans TC',sans-serif;transition:.15s}
-.m-close:hover{background:rgba(255,255,255,.1)}
+/* y dimension examples */
+.dim-list{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.dim{padding:9px 11px;background:var(--card);border-radius:8px;border-left:2px solid var(--py)}
+.dim-n{font-size:10px;color:var(--py);letter-spacing:.06em;margin-bottom:3px}
+.dim-body{font-size:11px;color:var(--fg3);line-height:1.6}
+.disc{margin-top:18px;padding:13px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.13);border-radius:12px}
+.disc-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.warn-ico{width:26px;height:26px;border-radius:50%;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.22);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gold);font-weight:700;flex-shrink:0}
+.disc-ttl{font-size:13px;color:var(--gold)}
+.disc-body{font-size:12px;color:rgba(251,191,36,.55);line-height:1.75}
+.m-close{width:100%;padding:11px;background:rgba(255,255,255,.05);border:1px solid var(--br);border-radius:9px;color:var(--fg2);font-size:13px;cursor:pointer;margin-top:18px;font-family:'Noto Sans TC',sans-serif;transition:.15s}
+.m-close:hover{background:rgba(255,255,255,.09)}
 
 /* ── STAR POPUP ── */
-.sm-wrap{display:none;position:fixed;inset:0;z-index:150;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);padding:22px}
+.sm-wrap{display:none;position:fixed;inset:0;z-index:150;align-items:center;justify-content:center;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);padding:20px}
 .sm-wrap.on{display:flex}
-.sm{background:linear-gradient(160deg,#1a1240,#100d26);border:1px solid var(--br2);border-radius:20px;padding:22px;width:min(320px,100%)}
-@keyframes fiS{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.sm{background:linear-gradient(160deg,#1c1540,#130f28);border:1px solid var(--br2);border-radius:18px;padding:20px;width:min(310px,100%)}
+@keyframes fiS{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
 .sm-wrap.on .sm{animation:fiS .18s ease}
-.sm-t{font-size:var(--fs-base);font-family:'Noto Serif TC',serif;margin-bottom:9px}
-.sm-b{font-size:var(--fs-sm);color:var(--fg2);line-height:1.85;white-space:pre-line}
-.sm-cl{margin-top:16px;width:100%;padding:10px;background:rgba(255,255,255,.07);border:none;border-radius:9px;color:var(--fg2);font-size:var(--fs-sm);cursor:pointer;font-family:'Noto Sans TC',sans-serif}
+.sm-t{font-size:14px;font-family:'Noto Serif TC',serif;margin-bottom:8px}
+.sm-b{font-size:13px;color:var(--fg2);line-height:1.8;white-space:pre-line}
+.sm-cl{margin-top:14px;width:100%;padding:9px;background:rgba(255,255,255,.06);border:none;border-radius:8px;color:var(--fg2);font-size:12px;cursor:pointer;font-family:'Noto Sans TC',sans-serif}
 
 /* BOT NAV */
-.bot-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(7,5,26,.94);backdrop-filter:blur(18px);border-top:1px solid var(--br);padding:10px 0 max(10px,env(safe-area-inset-bottom));z-index:100;justify-content:space-around}
-@media(max-width:480px){.bot-nav{display:flex}.tabs{display:none}.page{padding-bottom:76px}}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--fg3);font-size:11px;cursor:pointer;padding:6px 26px;transition:.15s;font-family:'Noto Sans TC',sans-serif;letter-spacing:.04em}
+.bot-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,7,22,.93);backdrop-filter:blur(16px);border-top:1px solid var(--br);padding:9px 0 max(9px,env(safe-area-inset-bottom));z-index:100;justify-content:space-around}
+@media(max-width:480px){.bot-nav{display:flex}.tabs{display:none}.page{padding-bottom:72px}}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--fg3);font-size:10px;cursor:pointer;padding:5px 24px;transition:.15s;font-family:'Noto Sans TC',sans-serif;letter-spacing:.04em}
 .nav-btn.on{color:var(--fg)}
-.nav-ico{font-size:19px;margin-bottom:1px}
+.nav-ico{font-size:17px;margin-bottom:1px}
 
-@keyframes fu{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
-.anim{animation:fu .33s ease both}
-
-/* confidence chip */
-.conf-chip{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 8px;border-radius:100px;background:var(--card);border:1px solid var(--br);cursor:default}
-.conf-chip[title]:hover::after{content:attr(title);position:absolute;background:var(--bg2);border:1px solid var(--br2);border-radius:8px;padding:7px 11px;font-size:11px;color:var(--fg2);max-width:200px;line-height:1.55;margin-top:32px;z-index:10;pointer-events:none;white-space:normal}
-.axis-row{position:relative}
-.conf-ring{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:conic-gradient(var(--cc) calc(var(--pct,50)*1%),rgba(255,255,255,.08) 0);position:relative;flex-shrink:0}
-.conf-ring::before{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--bg1)}
-.conf-val{position:relative;font-size:10px;font-family:'Noto Serif TC',serif;color:var(--fg);z-index:1}
-.conf-lbl{font-size:10px;color:var(--fg3);line-height:1.4;letter-spacing:.03em}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fu .32s ease both}
 </style>
 </head>
 <body>
 <canvas id="bgc"></canvas>
 <div class="page">
 
+<!-- HEADER -->
 <div class="hd">
   <button class="info-btn" onclick="openInfo()">ℹ</button>
   <div class="hd-main">AWARENESS · <em>COORDINATE</em> · SYSTEM</div>
   <div class="hd-divline"></div>
-  <div class="hd-credit">Original Idea by Lance</div>
-  <div class="hd-desc">終極目標是<strong>活出自在的人生</strong>，但要先清楚現在的定位。透過 X・Y・Z 三軸，看見自己在哪裡，再決定下一步怎麼走。</div>
+  <div class="hd-credit">覺察座標系統 3D 地圖 · GitHub Pages Safe Version</div>
+  <div class="hd-desc">終極目標是<strong>活出自在的人生</strong>，但要先清楚現在的定位。<br>透過 X・Y・Z 三軸，看見自己在哪裡，再決定下一步怎麼走。</div>
 </div>
-
-<!-- GOOGLE AUTH BAR -->
-<div class="auth-bar" id="auth-bar">
-  <div class="auth-signed-out" id="auth-signed-out">
-    <div class="auth-desc">登入 Google 帳號以使用 AI 分析功能<br><span class="auth-note">使用你自己的免費 Google AI 額度，不儲存任何資料</span></div>
-    <button class="google-sign-btn" id="google-sign-btn" onclick="signIn()">
-      <svg width="18" height="18" viewBox="0 0 24 24" style="flex-shrink:0"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      使用 Google 帳號登入
-    </button>
-  </div>
-  <div class="auth-signed-in" id="auth-signed-in" style="display:none">
-    <div class="auth-user-row">
-      <img class="auth-avatar" id="auth-avatar" src="" alt="">
-      <div class="auth-user-info">
-        <div class="auth-name" id="auth-name"></div>
-        <div class="auth-note">已連結 Google AI 額度</div>
-      </div>
-      <button class="auth-signout-btn" onclick="signOut()">登出</button>
-    </div>
-  </div>
-</div>
-
 <div class="divider"></div>
+
 <div class="tabs">
   <button class="tb on" id="tb-loc" onclick="tab('loc')">定位</button>
   <button class="tb" id="tb-his" onclick="tab('his')">紀錄</button>
 </div>
 
 <div class="sec on" id="sec-loc">
+  <!-- COORD DIAGRAM -->
   <div class="coord-wrap">
-    <svg id="coord-svg" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"></svg>
+    <svg id="coord-svg" viewBox="0 0 360 270" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
   <div class="coord-hint" id="coord-hint">✦ 輸入狀態後，座標點將在此亮起</div>
+
   <div class="fl">
     <div class="fl-lbl">現在的狀態</div>
     <textarea id="inp" placeholder="現在最佔據我的事是……&#10;身體的感覺是……情緒是……&#10;我一直在想……卡在……" rows="4"></textarea>
@@ -296,8 +263,9 @@ textarea:focus,input[type=text]:focus{border-color:rgba(192,132,252,.4);backgrou
   <button class="btn-go" id="btn-go" onclick="go()">✦ 開始定位</button>
 </div>
 
-<div class="loading" id="loading"><div style="margin-bottom:12px"><span class="ld"></span><span class="ld"></span><span class="ld"></span></div>掃描座標中</div>
+<div class="loading" id="loading"><div style="margin-bottom:10px"><span class="ld"></span><span class="ld"></span><span class="ld"></span></div>掃描座標中</div>
 
+<!-- RESULT -->
 <div class="result" id="result">
   <div class="axis-row" id="axis-row"></div>
   <div id="sit-main"></div>
@@ -324,7 +292,9 @@ textarea:focus,input[type=text]:focus{border-color:rgba(192,132,252,.4);backgrou
 <div class="modal">
   <div class="mpill"></div>
   <div class="mttl">覺察座標系統</div>
-  <div class="m-sub">終極目標是活出自在的人生。先看清現在的位置，再決定下一步。</div>
+  <div class="m-sub">終極目標是活出自在的人生。<br>先看清現在的位置，再決定下一步。</div>
+
+  <!-- X AXIS -->
   <div class="ax-sec">
     <div class="ax-sec-hd"><span class="ax-bdg abx">X 軸</span><span class="ax-sub">問題規模（你把事情放多大的脈絡裡看）</span></div>
     <div class="ax-desc">問題規模 = 你把一件事放在多大的脈絡裡理解，以及你打算用多大的層級去處理它。</div>
@@ -339,408 +309,84 @@ textarea:focus,input[type=text]:focus{border-color:rgba(192,132,252,.4);backgrou
       <tr><td>7 存在哲學</td><td>人為何痛苦？我為何活？</td><td>自由、意義、靈魂</td></tr>
     </table>
   </div>
+
+  <!-- Y AXIS -->
   <div class="ax-sec">
     <div class="ax-sec-hd"><span class="ax-bdg aby">Y 軸</span><span class="ax-sub">意識維度（你用什麼視角理解事情）</span></div>
     <div class="ax-desc">以「你與主管互動」為例，看不同維度如何看同一件事。</div>
     <div class="dim-list">
       <div class="dim"><div class="dim-n">1D · 單一當下</div><div class="dim-body">主管問我。我很怕。我想逃。只有當下感受，沒有前因後果。</div></div>
       <div class="dim"><div class="dim-n">2D · 二元對立</div><div class="dim-body">他是壓迫者，我是被壓迫的人。不是他錯就是我爛，不是反抗就是服從。</div></div>
-      <div class="dim"><div class="dim-n">3D · 因果連結</div><div class="dim-body">因為他一直追問，所以我被觸發。因為過去有被權威壓迫的經驗，我現在會凍結。</div></div>
-      <div class="dim"><div class="dim-n">4D · 探索核心</div><div class="dim-body">這是我面對權威、審判、自我價值的核心課題。但一直分析核心，卻不知道實際要怎麼回話，也是陷阱。</div></div>
+      <div class="dim"><div class="dim-n">3D · 因果連結</div><div class="dim-body">因為他一直追問，所以我被觸發。因為過去有被權威壓迫的經驗，我現在會凍結。「我有一個反應模式。」</div></div>
+      <div class="dim"><div class="dim-n">4D · 探索核心</div><div class="dim-body">這不只是主管。這是我面對權威、審判、自我價值的核心課題。但危險是一直分析核心，卻不知道實際要怎麼回話。</div></div>
       <div class="dim"><div class="dim-n">5D · 主動創造</div><div class="dim-body">我開始主動設計：事前整理狀態、主動回報進度、用句子保護自己。從「被發生」轉成「主動設計」。</div></div>
       <div class="dim"><div class="dim-n">6D · 系統整合</div><div class="dim-body">主管壓力 → 睡眠變差 → 沒力準備面試 → 金錢焦慮 → 更不敢離職 → 更討厭主管。看見整個系統循環。</div></div>
       <div class="dim"><div class="dim-n">7D · 意義洞見</div><div class="dim-body">「我的課題不是打敗主管，而是在權威面前仍然站回自己。」精準命名課題，然後回到現實行動。</div></div>
     </div>
   </div>
+
+  <!-- Z AXIS -->
   <div class="ax-sec">
     <div class="ax-sec-hd"><span class="ax-bdg abz">Z 軸</span><span class="ax-sub">整合程度（與自己和解，到哪一步）</span></div>
     <div class="ax-desc">整合不是「我都沒錯」，而是溫柔地看見自己，然後做出新的選擇。</div>
     <div class="step-list">
-      <div class="step"><div class="step-n">STEP 1 · Z1–2</div><div class="step-ttl">承認事實</div><div class="step-body">不是美化自己，也不是罵自己。「我最近真的很累。」我不再假裝自己沒事。</div></div>
-      <div class="step"><div class="step-n">STEP 2 · Z2–3</div><div class="step-ttl">停止人格審判</div><div class="step-body">不再說「我怎麼又這樣」。改成：「這是一個反應，不是我的全部。」</div></div>
-      <div class="step"><div class="step-n">STEP 3 · Z3–4</div><div class="step-ttl">看見保護機制</div><div class="step-body">熬夜不是單純墮落，它可能在保護：我不想面對明天、我想拿回自主權。看見壞習慣背後其實有需求。</div></div>
-      <div class="step"><div class="step-n">STEP 4 · Z4–5</div><div class="step-ttl">溫柔但不放任</div><div class="step-body">真正的和解是：我理解你為什麼這樣，但我不會讓你繼續傷害我。</div></div>
-      <div class="step"><div class="step-n">STEP 5 · Z5–7</div><div class="step-ttl">做一個小的新選擇</div><div class="step-body">不是一次變成理想版本。「今晚 1:00 前上床。」「主管問我時先說我確認一下。」用行動重新支持自己。</div></div>
+      <div class="step"><div class="step-n">STEP 1 · Z1-2</div><div class="step-ttl">承認事實</div><div class="step-body">不是美化自己，也不是罵自己。「我最近真的很累。」「我有時候會熬夜逃避。」我不再假裝自己沒事。</div></div>
+      <div class="step"><div class="step-n">STEP 2 · Z2-3</div><div class="step-ttl">停止人格審判</div><div class="step-body">不再說「我怎麼又這樣」。改成：「這是一個反應，不是我的全部。」「這是我現在的狀態，不是我這個人的價值。」</div></div>
+      <div class="step"><div class="step-n">STEP 3 · Z3-4</div><div class="step-ttl">看見保護機制</div><div class="step-body">熬夜不是單純墮落，它可能在保護：我不想面對明天、我想拿回自主權、我白天太壓抑。看見壞習慣背後其實有需求。</div></div>
+      <div class="step"><div class="step-n">STEP 4 · Z4-5</div><div class="step-ttl">溫柔但不放任</div><div class="step-body">和解不是「我有原因，所以繼續這樣」。真正的和解是：我理解你為什麼這樣，但我不會讓你繼續傷害我。</div></div>
+      <div class="step"><div class="step-n">STEP 5 · Z5-7</div><div class="step-ttl">做一個小的新選擇</div><div class="step-body">不是一次變成理想版本。「今晚 1:00 前上床。」「主管問我時先說我確認一下。」「這週更新一次帳戶。」用行動重新支持自己。</div></div>
     </div>
   </div>
+
   <div class="disc">
     <div class="disc-hd"><div class="warn-ico">!</div><div class="disc-ttl">免責聲明</div></div>
-    <div class="disc-body">本工具為自我覺察輔助用途，所有分析結果僅供個人參考與反思，<strong style="color:rgba(251,191,36,.78);font-weight:400">與任何形式的心理諮商、醫療診斷或專業建議無關</strong>。如您正在經歷嚴重情緒困擾，請尋求專業協助。本工具不儲存任何個人資料至外部伺服器，紀錄僅存於您的裝置瀏覽器。</div>
+    <div class="disc-body">本工具為自我覺察輔助用途，所有分析結果僅供個人參考與反思，<strong style="color:rgba(251,191,36,.75);font-weight:400">與任何形式的心理諮商、醫療診斷或專業建議無關</strong>。如您正在經歷嚴重情緒困擾，請尋求專業協助。本工具不儲存任何個人資料至外部伺服器。</div>
   </div>
   <button class="m-close" onclick="closeInfo()">關閉</button>
 </div>
 </div>
 
+<!-- STAR POPUP -->
 <div class="sm-wrap" id="sm-wrap" onclick="if(event.target===this)closeSM()">
   <div class="sm"><div class="sm-t" id="sm-t"></div><div class="sm-b" id="sm-b"></div><button class="sm-cl" onclick="closeSM()">關閉</button></div>
 </div>
 
 <script>
-const CARDS_DB = {
-  "1-1-1": {"name": "當下迷失中", "cue": "被身體當下的議題淹沒，還沒辦法開始思考", "insight": "你現在就在最當下、最真實的地方：身體當下，單一反應，被情緒吞沒。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-1-2": {"name": "當下迷失中", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」", "insight": "你現在就在最當下、最真實的地方：身體當下，單一反應，命名覺察。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "說「我現在身體很緊」，不評判"},
-  "1-1-3": {"name": "當下迷失中", "cue": "已經能理解自己在身體當下上的模式，但還在消化", "insight": "你在身體當下的層面上，用單一反應的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-1-4": {"name": "當下迷失中", "cue": "不再批判自己有身體當下的問題，開始允許它存在", "insight": "你在身體當下的層面上，用單一反應的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-1-5": {"name": "當下迷失中", "cue": "能在身體當下的議題上做出有意識的小選擇", "insight": "你在身體當下的層面上，用單一反應的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-1-6": {"name": "當下迷失的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣", "insight": "你在身體當下的層面上，用單一反應的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-1-7": {"name": "當下迷失的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人", "insight": "你在身體當下的層面上，用單一反應的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "1-2-1": {"name": "身體對立感", "cue": "被身體當下的議題淹沒，還沒辦法開始思考", "insight": "你現在就在最當下、最真實的地方：身體當下，二元覺察，被情緒吞沒。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-2-2": {"name": "身體對立感", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」", "insight": "你現在就在最當下、最真實的地方：身體當下，二元覺察，命名覺察。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "說「我現在身體很緊」，不評判"},
-  "1-2-3": {"name": "身體對立感", "cue": "已經能理解自己在身體當下上的模式，但還在消化", "insight": "你在身體當下的層面上，用二元覺察的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-2-4": {"name": "身體對立感", "cue": "不再批判自己有身體當下的問題，開始允許它存在", "insight": "你在身體當下的層面上，用二元覺察的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-2-5": {"name": "身體對立感", "cue": "能在身體當下的議題上做出有意識的小選擇", "insight": "你在身體當下的層面上，用二元覺察的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-2-6": {"name": "身體對立的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣", "insight": "你在身體當下的層面上，用二元覺察的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-2-7": {"name": "身體對立的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人", "insight": "你在身體當下的層面上，用二元覺察的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "1-3-1": {"name": "看見身體原因", "cue": "被身體當下的議題淹沒，還沒辦法開始思考", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-3-2": {"name": "看見身體原因", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說「我現在身體很緊」，不評判"},
-  "1-3-3": {"name": "看見身體原因", "cue": "已經能理解自己在身體當下上的模式，但還在消化", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-3-4": {"name": "看見身體原因", "cue": "不再批判自己有身體當下的問題，開始允許它存在", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-3-5": {"name": "看見身體原因", "cue": "能在身體當下的議題上做出有意識的小選擇", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-3-6": {"name": "看見身體原因的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-3-7": {"name": "看見身體原因的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人", "insight": "你在身體當下的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "1-4-1": {"name": "探索身體核心", "cue": "被身體當下的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-4-2": {"name": "探索身體核心", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說「我現在身體很緊」，不評判"},
-  "1-4-3": {"name": "探索身體核心", "cue": "已經能理解自己在身體當下上的模式，但還在消化，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-4-4": {"name": "探索身體核心", "cue": "不再批判自己有身體當下的問題，開始允許它存在，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-4-5": {"name": "探索身體核心", "cue": "能在身體當下的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-4-6": {"name": "探索身體核心的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-4-7": {"name": "探索身體核心的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在身體當下的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "1-5-1": {"name": "主動照顧身體", "cue": "被身體當下的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-5-2": {"name": "主動照顧身體", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說「我現在身體很緊」，不評判"},
-  "1-5-3": {"name": "主動照顧身體", "cue": "已經能理解自己在身體當下上的模式，但還在消化，且開始主動設計改變", "insight": "你在身體當下的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-5-4": {"name": "主動照顧身體", "cue": "不再批判自己有身體當下的問題，開始允許它存在，且開始主動設計改變", "insight": "你在身體當下的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-5-5": {"name": "主動照顧身體", "cue": "能在身體當下的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在身體當下的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-5-6": {"name": "主動照顧身體的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在身體當下的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-5-7": {"name": "主動照顧身體的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在身體當下的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "1-6-1": {"name": "身心系統覺知", "cue": "被身體當下的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-6-2": {"name": "身心系統覺知", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說「我現在身體很緊」，不評判"},
-  "1-6-3": {"name": "身心系統覺知", "cue": "已經能理解自己在身體當下上的模式，但還在消化，且看見多個系統交織", "insight": "你在身體當下的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-6-4": {"name": "身心系統覺知", "cue": "不再批判自己有身體當下的問題，開始允許它存在，且看見多個系統交織", "insight": "你在身體當下的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-6-5": {"name": "身心系統覺知", "cue": "能在身體當下的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在身體當下的層面上，用系統整合的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-6-6": {"name": "身心系統覺知的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在身體當下的層面上，用系統整合的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-6-7": {"name": "身心系統覺知的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在身體當下的層面上，用系統整合的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "1-7-1": {"name": "身體即靈魂", "cue": "被身體當下的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "深呼吸三次，把注意力帶回身體"},
-  "1-7-2": {"name": "身體即靈魂", "cue": "剛開始說得出「我現在在身體當下的層面卡住了」，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說「我現在身體很緊」，不評判"},
-  "1-7-3": {"name": "身體即靈魂", "cue": "已經能理解自己在身體當下上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在身體當下的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "記錄今天身體的感受，不分析"},
-  "1-7-4": {"name": "身體即靈魂", "cue": "不再批判自己有身體當下的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在身體當下的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對身體說一句：謝謝你告訴我"},
-  "1-7-5": {"name": "身體即靈魂", "cue": "能在身體當下的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在身體當下的層面上，用意義洞見的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件照顧身體的小事"},
-  "1-7-6": {"name": "身體即靈魂的轉化", "cue": "持續在身體當下上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在身體當下的層面上，用意義洞見的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連續三天紀錄身體感受"},
-  "1-7-7": {"name": "身體即靈魂的轉化", "cue": "把身體當下的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在身體當下的層面上，用意義洞見的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把身心連結的體驗分享給一個人"},
-  "2-1-1": {"name": "情緒淹沒中", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考", "insight": "你現在就在最當下、最真實的地方：情緒心理，單一反應，被情緒吞沒。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "說出一個你現在有的情緒"},
-  "2-1-2": {"name": "情緒淹沒中", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」", "insight": "你現在就在最當下、最真實的地方：情緒心理，單一反應，命名覺察。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-1-3": {"name": "情緒淹沒中", "cue": "已經能理解自己在情緒心理上的模式，但還在消化", "insight": "你在情緒心理的層面上，用單一反應的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-1-4": {"name": "情緒淹沒中", "cue": "不再批判自己有情緒心理的問題，開始允許它存在", "insight": "你在情緒心理的層面上，用單一反應的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-1-5": {"name": "情緒淹沒中", "cue": "能在情緒心理的議題上做出有意識的小選擇", "insight": "你在情緒心理的層面上，用單一反應的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-1-6": {"name": "情緒淹沒的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣", "insight": "你在情緒心理的層面上，用單一反應的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-1-7": {"name": "情緒淹沒的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人", "insight": "你在情緒心理的層面上，用單一反應的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "2-2-1": {"name": "情緒對立感", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考", "insight": "你現在就在最當下、最真實的地方：情緒心理，二元覺察，被情緒吞沒。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "說出一個你現在有的情緒"},
-  "2-2-2": {"name": "情緒對立感", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」", "insight": "你現在就在最當下、最真實的地方：情緒心理，二元覺察，命名覺察。這不是低等，這是最誠實的狀態。你不需要假裝比現在更好。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-2-3": {"name": "情緒對立感", "cue": "已經能理解自己在情緒心理上的模式，但還在消化", "insight": "你在情緒心理的層面上，用二元覺察的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-2-4": {"name": "情緒對立感", "cue": "不再批判自己有情緒心理的問題，開始允許它存在", "insight": "你在情緒心理的層面上，用二元覺察的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-2-5": {"name": "情緒對立感", "cue": "能在情緒心理的議題上做出有意識的小選擇", "insight": "你在情緒心理的層面上，用二元覺察的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-2-6": {"name": "情緒對立的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣", "insight": "你在情緒心理的層面上，用二元覺察的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-2-7": {"name": "情緒對立的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人", "insight": "你在情緒心理的層面上，用二元覺察的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "2-3-1": {"name": "情緒因果連結", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你現在有的情緒"},
-  "2-3-2": {"name": "情緒因果連結", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-3-3": {"name": "情緒因果連結", "cue": "已經能理解自己在情緒心理上的模式，但還在消化", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-3-4": {"name": "情緒因果連結", "cue": "不再批判自己有情緒心理的問題，開始允許它存在", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-3-5": {"name": "情緒因果連結", "cue": "能在情緒心理的議題上做出有意識的小選擇", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-3-6": {"name": "情緒因果連結的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-3-7": {"name": "情緒因果連結的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人", "insight": "你在情緒心理的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "2-4-1": {"name": "探索情緒核心", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你現在有的情緒"},
-  "2-4-2": {"name": "探索情緒核心", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-4-3": {"name": "探索情緒核心", "cue": "已經能理解自己在情緒心理上的模式，但還在消化，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-4-4": {"name": "探索情緒核心", "cue": "不再批判自己有情緒心理的問題，開始允許它存在，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-4-5": {"name": "探索情緒核心", "cue": "能在情緒心理的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-4-6": {"name": "探索情緒核心的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-4-7": {"name": "探索情緒核心的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在情緒心理的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "2-5-1": {"name": "主動調節情緒", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你現在有的情緒"},
-  "2-5-2": {"name": "主動調節情緒", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-5-3": {"name": "主動調節情緒", "cue": "已經能理解自己在情緒心理上的模式，但還在消化，且開始主動設計改變", "insight": "你在情緒心理的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-5-4": {"name": "主動調節情緒", "cue": "不再批判自己有情緒心理的問題，開始允許它存在，且開始主動設計改變", "insight": "你在情緒心理的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-5-5": {"name": "主動調節情緒", "cue": "能在情緒心理的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在情緒心理的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-5-6": {"name": "主動調節情緒的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在情緒心理的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-5-7": {"name": "主動調節情緒的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在情緒心理的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "2-6-1": {"name": "情緒系統覺知", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你現在有的情緒"},
-  "2-6-2": {"name": "情緒系統覺知", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-6-3": {"name": "情緒系統覺知", "cue": "已經能理解自己在情緒心理上的模式，但還在消化，且看見多個系統交織", "insight": "你在情緒心理的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-6-4": {"name": "情緒系統覺知", "cue": "不再批判自己有情緒心理的問題，開始允許它存在，且看見多個系統交織", "insight": "你在情緒心理的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-6-5": {"name": "情緒系統覺知", "cue": "能在情緒心理的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在情緒心理的層面上，用系統整合的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-6-6": {"name": "情緒系統覺知的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在情緒心理的層面上，用系統整合的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-6-7": {"name": "情緒系統覺知的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在情緒心理的層面上，用系統整合的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "2-7-1": {"name": "情緒即訊息", "cue": "被情緒心理的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你現在有的情緒"},
-  "2-7-2": {"name": "情緒即訊息", "cue": "剛開始說得出「我現在在情緒心理的層面卡住了」，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "命名一個情緒：我現在感到＿＿"},
-  "2-7-3": {"name": "情緒即訊息", "cue": "已經能理解自己在情緒心理上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在情緒心理的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下這個情緒背後可能的需求"},
-  "2-7-4": {"name": "情緒即訊息", "cue": "不再批判自己有情緒心理的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在情緒心理的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對這個情緒說：我允許你在"},
-  "2-7-5": {"name": "情緒即訊息", "cue": "能在情緒心理的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在情緒心理的層面上，用意義洞見的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "選擇一個不被情緒完全帶走的回應"},
-  "2-7-6": {"name": "情緒即訊息的轉化", "cue": "持續在情緒心理上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在情緒心理的層面上，用意義洞見的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週每天命名一個情緒"},
-  "2-7-7": {"name": "情緒即訊息的轉化", "cue": "把情緒心理的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在情緒心理的層面上，用意義洞見的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把情緒智慧整理成可以幫助別人的格式"},
-  "3-1-1": {"name": "模式反應中", "cue": "被個人模式的議題淹沒，還沒辦法開始思考", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你模式的名字"},
-  "3-1-2": {"name": "模式反應中", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你的習慣模式"},
-  "3-1-3": {"name": "模式反應中", "cue": "已經能理解自己在個人模式上的模式，但還在消化", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-1-4": {"name": "模式反應中", "cue": "不再批判自己有個人模式的問題，開始允許它存在", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-1-5": {"name": "模式反應中", "cue": "能在個人模式的議題上做出有意識的小選擇", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-1-6": {"name": "模式反應的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-1-7": {"name": "模式反應的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人", "insight": "你在個人模式的層面上，用單一反應的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "3-2-1": {"name": "看見慣性衝突", "cue": "被個人模式的議題淹沒，還沒辦法開始思考", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你模式的名字"},
-  "3-2-2": {"name": "看見慣性衝突", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你的習慣模式"},
-  "3-2-3": {"name": "看見慣性衝突", "cue": "已經能理解自己在個人模式上的模式，但還在消化", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-2-4": {"name": "看見慣性衝突", "cue": "不再批判自己有個人模式的問題，開始允許它存在", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-2-5": {"name": "看見慣性衝突", "cue": "能在個人模式的議題上做出有意識的小選擇", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-2-6": {"name": "看見慣性衝突的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-2-7": {"name": "看見慣性衝突的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人", "insight": "你在個人模式的層面上，用二元覺察的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "3-3-1": {"name": "理解行為模式", "cue": "被個人模式的議題淹沒，還沒辦法開始思考", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你模式的名字"},
-  "3-3-2": {"name": "理解行為模式", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你的習慣模式"},
-  "3-3-3": {"name": "理解行為模式", "cue": "已經能理解自己在個人模式上的模式，但還在消化", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-3-4": {"name": "理解行為模式", "cue": "不再批判自己有個人模式的問題，開始允許它存在", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-3-5": {"name": "理解行為模式", "cue": "能在個人模式的議題上做出有意識的小選擇", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-3-6": {"name": "理解行為模式的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-3-7": {"name": "理解行為模式的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人", "insight": "你在個人模式的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "3-4-1": {"name": "探索核心信念", "cue": "被個人模式的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你模式的名字"},
-  "3-4-2": {"name": "探索核心信念", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出一個你的習慣模式"},
-  "3-4-3": {"name": "探索核心信念", "cue": "已經能理解自己在個人模式上的模式，但還在消化，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-4-4": {"name": "探索核心信念", "cue": "不再批判自己有個人模式的問題，開始允許它存在，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-4-5": {"name": "探索核心信念", "cue": "能在個人模式的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-4-6": {"name": "探索核心信念的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-4-7": {"name": "探索核心信念的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在個人模式的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "3-5-1": {"name": "主動改寫模式", "cue": "被個人模式的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你模式的名字"},
-  "3-5-2": {"name": "主動改寫模式", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你的習慣模式"},
-  "3-5-3": {"name": "主動改寫模式", "cue": "已經能理解自己在個人模式上的模式，但還在消化，且開始主動設計改變", "insight": "你在個人模式的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-5-4": {"name": "主動改寫模式", "cue": "不再批判自己有個人模式的問題，開始允許它存在，且開始主動設計改變", "insight": "你在個人模式的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-5-5": {"name": "主動改寫模式", "cue": "能在個人模式的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在個人模式的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-5-6": {"name": "主動改寫模式的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在個人模式的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-5-7": {"name": "主動改寫模式的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在個人模式的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "3-6-1": {"name": "模式系統覺知", "cue": "被個人模式的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你模式的名字"},
-  "3-6-2": {"name": "模式系統覺知", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你的習慣模式"},
-  "3-6-3": {"name": "模式系統覺知", "cue": "已經能理解自己在個人模式上的模式，但還在消化，且看見多個系統交織", "insight": "你在個人模式的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-6-4": {"name": "模式系統覺知", "cue": "不再批判自己有個人模式的問題，開始允許它存在，且看見多個系統交織", "insight": "你在個人模式的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-6-5": {"name": "模式系統覺知", "cue": "能在個人模式的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在個人模式的層面上，用系統整合的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-6-6": {"name": "模式系統覺知的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在個人模式的層面上，用系統整合的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-6-7": {"name": "模式系統覺知的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在個人模式的層面上，用系統整合的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "3-7-1": {"name": "模式即課題", "cue": "被個人模式的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你模式的名字"},
-  "3-7-2": {"name": "模式即課題", "cue": "剛開始說得出「我現在在個人模式的層面卡住了」，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出一個你的習慣模式"},
-  "3-7-3": {"name": "模式即課題", "cue": "已經能理解自己在個人模式上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在個人模式的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "畫出一個你的慣性循環"},
-  "3-7-4": {"name": "模式即課題", "cue": "不再批判自己有個人模式的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在個人模式的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對自己說：這個模式曾經保護過我"},
-  "3-7-5": {"name": "模式即課題", "cue": "能在個人模式的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在個人模式的層面上，用意義洞見的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天試試一個不同的習慣選擇"},
-  "3-7-6": {"name": "模式即課題的轉化", "cue": "持續在個人模式上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在個人模式的層面上，用意義洞見的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "觀察自己的模式一週不評判"},
-  "3-7-7": {"name": "模式即課題的轉化", "cue": "把個人模式的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在個人模式的層面上，用意義洞見的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把模式覺察的方法分享出去"},
-  "4-1-1": {"name": "關係衝擊中", "cue": "被關係互動的議題淹沒，還沒辦法開始思考", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出這段關係讓你感受到什麼"},
-  "4-1-2": {"name": "關係衝擊中", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "描述一個讓你有反應的互動"},
-  "4-1-3": {"name": "關係衝擊中", "cue": "已經能理解自己在關係互動上的模式，但還在消化", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-1-4": {"name": "關係衝擊中", "cue": "不再批判自己有關係互動的問題，開始允許它存在", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-1-5": {"name": "關係衝擊中", "cue": "能在關係互動的議題上做出有意識的小選擇", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-1-6": {"name": "關係衝擊的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-1-7": {"name": "關係衝擊的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人", "insight": "你在關係互動的層面上，用單一反應的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "4-2-1": {"name": "關係對立感", "cue": "被關係互動的議題淹沒，還沒辦法開始思考", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出這段關係讓你感受到什麼"},
-  "4-2-2": {"name": "關係對立感", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "描述一個讓你有反應的互動"},
-  "4-2-3": {"name": "關係對立感", "cue": "已經能理解自己在關係互動上的模式，但還在消化", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-2-4": {"name": "關係對立感", "cue": "不再批判自己有關係互動的問題，開始允許它存在", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-2-5": {"name": "關係對立感", "cue": "能在關係互動的議題上做出有意識的小選擇", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-2-6": {"name": "關係對立的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-2-7": {"name": "關係對立的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人", "insight": "你在關係互動的層面上，用二元覺察的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "4-3-1": {"name": "看見互動因果", "cue": "被關係互動的議題淹沒，還沒辦法開始思考", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出這段關係讓你感受到什麼"},
-  "4-3-2": {"name": "看見互動因果", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "描述一個讓你有反應的互動"},
-  "4-3-3": {"name": "看見互動因果", "cue": "已經能理解自己在關係互動上的模式，但還在消化", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-3-4": {"name": "看見互動因果", "cue": "不再批判自己有關係互動的問題，開始允許它存在", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-3-5": {"name": "看見互動因果", "cue": "能在關係互動的議題上做出有意識的小選擇", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-3-6": {"name": "看見互動因果的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-3-7": {"name": "看見互動因果的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人", "insight": "你在關係互動的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "4-4-1": {"name": "探索關係核心", "cue": "被關係互動的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到被情緒吞沒的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "說出這段關係讓你感受到什麼"},
-  "4-4-2": {"name": "探索關係核心", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到命名覺察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "描述一個讓你有反應的互動"},
-  "4-4-3": {"name": "探索關係核心", "cue": "已經能理解自己在關係互動上的模式，但還在消化，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-4-4": {"name": "探索關係核心", "cue": "不再批判自己有關係互動的問題，開始允許它存在，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-4-5": {"name": "探索關係核心", "cue": "能在關係互動的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-4-6": {"name": "探索關係核心的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-4-7": {"name": "探索關係核心的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在關係互動的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "4-5-1": {"name": "主動設計關係", "cue": "被關係互動的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出這段關係讓你感受到什麼"},
-  "4-5-2": {"name": "主動設計關係", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」，且開始主動設計改變", "insight": "你有主動創造的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "描述一個讓你有反應的互動"},
-  "4-5-3": {"name": "主動設計關係", "cue": "已經能理解自己在關係互動上的模式，但還在消化，且開始主動設計改變", "insight": "你在關係互動的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-5-4": {"name": "主動設計關係", "cue": "不再批判自己有關係互動的問題，開始允許它存在，且開始主動設計改變", "insight": "你在關係互動的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-5-5": {"name": "主動設計關係", "cue": "能在關係互動的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在關係互動的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-5-6": {"name": "主動設計關係的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在關係互動的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-5-7": {"name": "主動設計關係的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在關係互動的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "4-6-1": {"name": "關係系統覺知", "cue": "被關係互動的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出這段關係讓你感受到什麼"},
-  "4-6-2": {"name": "關係系統覺知", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」，且看見多個系統交織", "insight": "你有系統整合的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "描述一個讓你有反應的互動"},
-  "4-6-3": {"name": "關係系統覺知", "cue": "已經能理解自己在關係互動上的模式，但還在消化，且看見多個系統交織", "insight": "你在關係互動的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-6-4": {"name": "關係系統覺知", "cue": "不再批判自己有關係互動的問題，開始允許它存在，且看見多個系統交織", "insight": "你在關係互動的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-6-5": {"name": "關係系統覺知", "cue": "能在關係互動的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在關係互動的層面上，用系統整合的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-6-6": {"name": "關係系統覺知的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在關係互動的層面上，用系統整合的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-6-7": {"name": "關係系統覺知的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在關係互動的層面上，用系統整合的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "4-7-1": {"name": "關係即鏡子", "cue": "被關係互動的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在被情緒吞沒。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "說出這段關係讓你感受到什麼"},
-  "4-7-2": {"name": "關係即鏡子", "cue": "剛開始說得出「我現在在關係互動的層面卡住了」，且能精準命名自己的課題", "insight": "你有意義洞見的能力，能看見很多層次，但現在的整合狀態還在命名覺察。這是很常見的：看得見，不代表已經活出來。給自己時間。", "next": "描述一個讓你有反應的互動"},
-  "4-7-3": {"name": "關係即鏡子", "cue": "已經能理解自己在關係互動上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在關係互動的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下對方做了什麼讓你有反應"},
-  "4-7-4": {"name": "關係即鏡子", "cue": "不再批判自己有關係互動的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在關係互動的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受這段關係現在的樣子"},
-  "4-7-5": {"name": "關係即鏡子", "cue": "能在關係互動的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在關係互動的層面上，用意義洞見的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "在下次互動前，先確認自己的需求"},
-  "4-7-6": {"name": "關係即鏡子的轉化", "cue": "持續在關係互動上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在關係互動的層面上，用意義洞見的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這週在關係中練習說一個需求"},
-  "4-7-7": {"name": "關係即鏡子的轉化", "cue": "把關係互動的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在關係互動的層面上，用意義洞見的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "陪伴一個在關係中掙扎的人"},
-  "5-1-1": {"name": "家庭衝擊中", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-1-2": {"name": "家庭衝擊中", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-1-3": {"name": "家庭衝擊中", "cue": "已經能理解自己在家庭成長上的模式，但還在消化", "insight": "你感受到家庭成長的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-1-4": {"name": "家庭衝擊中", "cue": "不再批判自己有家庭成長的問題，開始允許它存在", "insight": "你感受到家庭成長的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-1-5": {"name": "家庭衝擊中", "cue": "能在家庭成長的議題上做出有意識的小選擇", "insight": "你感受到家庭成長的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-1-6": {"name": "家庭衝擊的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣", "insight": "你感受到家庭成長的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-1-7": {"name": "家庭衝擊的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人", "insight": "你感受到家庭成長的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "把原生家庭的療癒整理成洞見"},
-  "5-2-1": {"name": "家庭對立感", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-2-2": {"name": "家庭對立感", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-2-3": {"name": "家庭對立感", "cue": "已經能理解自己在家庭成長上的模式，但還在消化", "insight": "你感受到家庭成長的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-2-4": {"name": "家庭對立感", "cue": "不再批判自己有家庭成長的問題，開始允許它存在", "insight": "你感受到家庭成長的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-2-5": {"name": "家庭對立感", "cue": "能在家庭成長的議題上做出有意識的小選擇", "insight": "你感受到家庭成長的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-2-6": {"name": "家庭對立的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣", "insight": "你感受到家庭成長的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-2-7": {"name": "家庭對立的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人", "insight": "你感受到家庭成長的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "把原生家庭的療癒整理成洞見"},
-  "5-3-1": {"name": "理解家庭影響", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-3-2": {"name": "理解家庭影響", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-3-3": {"name": "理解家庭影響", "cue": "已經能理解自己在家庭成長上的模式，但還在消化", "insight": "你在家庭成長的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-3-4": {"name": "理解家庭影響", "cue": "不再批判自己有家庭成長的問題，開始允許它存在", "insight": "你在家庭成長的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-3-5": {"name": "理解家庭影響", "cue": "能在家庭成長的議題上做出有意識的小選擇", "insight": "你在家庭成長的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-3-6": {"name": "理解家庭影響的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣", "insight": "你在家庭成長的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-3-7": {"name": "理解家庭影響的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人", "insight": "你在家庭成長的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把原生家庭的療癒整理成洞見"},
-  "5-4-1": {"name": "探索原生核心", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-4-2": {"name": "探索原生核心", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」，且已能看見底層本質", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-4-3": {"name": "探索原生核心", "cue": "已經能理解自己在家庭成長上的模式，但還在消化，且已能看見底層本質", "insight": "你在家庭成長的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-4-4": {"name": "探索原生核心", "cue": "不再批判自己有家庭成長的問題，開始允許它存在，且已能看見底層本質", "insight": "你在家庭成長的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-4-5": {"name": "探索原生核心", "cue": "能在家庭成長的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在家庭成長的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-4-6": {"name": "探索原生核心的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在家庭成長的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-4-7": {"name": "探索原生核心的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在家庭成長的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把原生家庭的療癒整理成洞見"},
-  "5-5-1": {"name": "主動重寫家庭", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-5-2": {"name": "主動重寫家庭", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」，且開始主動設計改變", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-5-3": {"name": "主動重寫家庭", "cue": "已經能理解自己在家庭成長上的模式，但還在消化，且開始主動設計改變", "insight": "你在家庭成長的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-5-4": {"name": "主動重寫家庭", "cue": "不再批判自己有家庭成長的問題，開始允許它存在，且開始主動設計改變", "insight": "你在家庭成長的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-5-5": {"name": "主動重寫家庭", "cue": "能在家庭成長的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在家庭成長的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-5-6": {"name": "主動重寫家庭的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在家庭成長的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-5-7": {"name": "主動重寫家庭的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在家庭成長的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把原生家庭的療癒整理成洞見"},
-  "5-6-1": {"name": "家庭系統覺知", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-6-2": {"name": "家庭系統覺知", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」，且看見多個系統交織", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-6-3": {"name": "家庭系統覺知", "cue": "已經能理解自己在家庭成長上的模式，但還在消化，且看見多個系統交織", "insight": "你在家庭成長的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-6-4": {"name": "家庭系統覺知", "cue": "不再批判自己有家庭成長的問題，開始允許它存在，且看見多個系統交織", "insight": "你在家庭成長的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-6-5": {"name": "家庭系統覺知", "cue": "能在家庭成長的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在家庭成長的層面上，用系統整合的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-6-6": {"name": "家庭系統覺知的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在家庭成長的層面上，用系統整合的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-6-7": {"name": "家庭系統覺知的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在家庭成長的層面上，用系統整合的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把原生家庭的療癒整理成洞見"},
-  "5-7-1": {"name": "家庭即靈魂功課", "cue": "被家庭成長的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一件關於家人讓你難受的事"},
-  "5-7-2": {"name": "家庭即靈魂功課", "cue": "剛開始說得出「我現在在家庭成長的層面卡住了」，且能精準命名自己的課題", "insight": "你把問題看到家庭成長的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個家庭帶給你的信念"},
-  "5-7-3": {"name": "家庭即靈魂功課", "cue": "已經能理解自己在家庭成長上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在家庭成長的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "連結一個家庭經驗和現在的模式"},
-  "5-7-4": {"name": "家庭即靈魂功課", "cue": "不再批判自己有家庭成長的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在家庭成長的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受原生家庭的限制不是你的錯"},
-  "5-7-5": {"name": "家庭即靈魂功課", "cue": "能在家庭成長的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在家庭成長的層面上，用意義洞見的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一件跟原生家庭不一樣的小事"},
-  "5-7-6": {"name": "家庭即靈魂功課的轉化", "cue": "持續在家庭成長上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在家庭成長的層面上，用意義洞見的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "這個月做一件重新定義家庭關係的事"},
-  "5-7-7": {"name": "家庭即靈魂功課的轉化", "cue": "把家庭成長的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在家庭成長的層面上，用意義洞見的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把原生家庭的療癒整理成洞見"},
-  "6-1-1": {"name": "社會衝擊中", "cue": "被社會文化的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-1-2": {"name": "社會衝擊中", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-1-3": {"name": "社會衝擊中", "cue": "已經能理解自己在社會文化上的模式，但還在消化", "insight": "你感受到社會文化的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "找一個你認同的反主流觀點"},
-  "6-1-4": {"name": "社會衝擊中", "cue": "不再批判自己有社會文化的問題，開始允許它存在", "insight": "你感受到社會文化的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "接受你和主流社會的不同"},
-  "6-1-5": {"name": "社會衝擊中", "cue": "能在社會文化的議題上做出有意識的小選擇", "insight": "你感受到社會文化的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-1-6": {"name": "社會衝擊的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣", "insight": "你感受到社會文化的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-1-7": {"name": "社會衝擊的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人", "insight": "你感受到社會文化的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "對社會議題提出你的獨特觀點"},
-  "6-2-1": {"name": "社會對立感", "cue": "被社會文化的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-2-2": {"name": "社會對立感", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-2-3": {"name": "社會對立感", "cue": "已經能理解自己在社會文化上的模式，但還在消化", "insight": "你感受到社會文化的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "找一個你認同的反主流觀點"},
-  "6-2-4": {"name": "社會對立感", "cue": "不再批判自己有社會文化的問題，開始允許它存在", "insight": "你感受到社會文化的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "接受你和主流社會的不同"},
-  "6-2-5": {"name": "社會對立感", "cue": "能在社會文化的議題上做出有意識的小選擇", "insight": "你感受到社會文化的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-2-6": {"name": "社會對立的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣", "insight": "你感受到社會文化的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-2-7": {"name": "社會對立的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人", "insight": "你感受到社會文化的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "對社會議題提出你的獨特觀點"},
-  "6-3-1": {"name": "看見社會因果", "cue": "被社會文化的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-3-2": {"name": "看見社會因果", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-3-3": {"name": "看見社會因果", "cue": "已經能理解自己在社會文化上的模式，但還在消化", "insight": "你在社會文化的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "找一個你認同的反主流觀點"},
-  "6-3-4": {"name": "看見社會因果", "cue": "不再批判自己有社會文化的問題，開始允許它存在", "insight": "你在社會文化的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受你和主流社會的不同"},
-  "6-3-5": {"name": "看見社會因果", "cue": "能在社會文化的議題上做出有意識的小選擇", "insight": "你在社會文化的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-3-6": {"name": "看見社會因果的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣", "insight": "你在社會文化的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-3-7": {"name": "看見社會因果的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人", "insight": "你在社會文化的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對社會議題提出你的獨特觀點"},
-  "6-4-1": {"name": "探索文化核心", "cue": "被社會文化的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-4-2": {"name": "探索文化核心", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」，且已能看見底層本質", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-4-3": {"name": "探索文化核心", "cue": "已經能理解自己在社會文化上的模式，但還在消化，且已能看見底層本質", "insight": "你在社會文化的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "找一個你認同的反主流觀點"},
-  "6-4-4": {"name": "探索文化核心", "cue": "不再批判自己有社會文化的問題，開始允許它存在，且已能看見底層本質", "insight": "你在社會文化的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受你和主流社會的不同"},
-  "6-4-5": {"name": "探索文化核心", "cue": "能在社會文化的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在社會文化的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-4-6": {"name": "探索文化核心的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在社會文化的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-4-7": {"name": "探索文化核心的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在社會文化的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對社會議題提出你的獨特觀點"},
-  "6-5-1": {"name": "主動超越文化", "cue": "被社會文化的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-5-2": {"name": "主動超越文化", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」，且開始主動設計改變", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-5-3": {"name": "主動超越文化", "cue": "已經能理解自己在社會文化上的模式，但還在消化，且開始主動設計改變", "insight": "你在社會文化的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "找一個你認同的反主流觀點"},
-  "6-5-4": {"name": "主動超越文化", "cue": "不再批判自己有社會文化的問題，開始允許它存在，且開始主動設計改變", "insight": "你在社會文化的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受你和主流社會的不同"},
-  "6-5-5": {"name": "主動超越文化", "cue": "能在社會文化的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在社會文化的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-5-6": {"name": "主動超越文化的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在社會文化的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-5-7": {"name": "主動超越文化的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在社會文化的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "對社會議題提出你的獨特觀點"},
-  "6-6-1": {"name": "社會系統覺知", "cue": "被社會文化的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-6-2": {"name": "社會系統覺知", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」，且看見多個系統交織", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-6-3": {"name": "社會系統覺知", "cue": "已經能理解自己在社會文化上的模式，但還在消化，且看見多個系統交織", "insight": "你在社會文化的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "找一個你認同的反主流觀點"},
-  "6-6-4": {"name": "社會系統覺知", "cue": "不再批判自己有社會文化的問題，開始允許它存在，且看見多個系統交織", "insight": "你在社會文化的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受你和主流社會的不同"},
-  "6-6-5": {"name": "社會系統覺知", "cue": "能在社會文化的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在社會文化×系統整合×主動選擇的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-6-6": {"name": "社會系統覺知的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在社會文化×系統整合×穩定練習的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-6-7": {"name": "社會系統覺知的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在社會文化×系統整合×轉化分享的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "對社會議題提出你的獨特觀點"},
-  "6-7-1": {"name": "文化即集體課題", "cue": "被社會文化的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個你不認同的社會期待"},
-  "6-7-2": {"name": "文化即集體課題", "cue": "剛開始說得出「我現在在社會文化的層面卡住了」，且能精準命名自己的課題", "insight": "你把問題看到社會文化的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "說出一個社會價值讓你疲憊的點"},
-  "6-7-3": {"name": "文化即集體課題", "cue": "已經能理解自己在社會文化上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在社會文化的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "找一個你認同的反主流觀點"},
-  "6-7-4": {"name": "文化即集體課題", "cue": "不再批判自己有社會文化的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在社會文化的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受你和主流社會的不同"},
-  "6-7-5": {"name": "文化即集體課題", "cue": "能在社會文化的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在社會文化×意義洞見×主動選擇的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "做一個不符合社會期待但符合自己的選擇"},
-  "6-7-6": {"name": "文化即集體課題的轉化", "cue": "持續在社會文化上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在社會文化×意義洞見×穩定練習的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "持續實踐一個反文化的生活選擇"},
-  "6-7-7": {"name": "文化即集體課題的轉化", "cue": "把社會文化的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在社會文化×意義洞見×轉化分享的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "對社會議題提出你的獨特觀點"},
-  "7-1-1": {"name": "存在衝擊中", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-1-2": {"name": "存在衝擊中", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-1-3": {"name": "存在衝擊中", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化", "insight": "你感受到靈魂存在的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-1-4": {"name": "存在衝擊中", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在", "insight": "你感受到靈魂存在的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "接受此刻還不需要答案"},
-  "7-1-5": {"name": "存在衝擊中", "cue": "能在靈魂存在的議題上做出有意識的小選擇", "insight": "你感受到靈魂存在的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-1-6": {"name": "存在衝擊的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣", "insight": "你感受到靈魂存在的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "把你的存在洞見整理成一句話"},
-  "7-1-7": {"name": "存在衝擊的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人", "insight": "你感受到靈魂存在的衝擊，但現在只有單一反應的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "把你的靈魂課題轉化成作品或服務"},
-  "7-2-1": {"name": "存在對立感", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-2-2": {"name": "存在對立感", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-2-3": {"name": "存在對立感", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化", "insight": "你感受到靈魂存在的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-2-4": {"name": "存在對立感", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在", "insight": "你感受到靈魂存在的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "接受此刻還不需要答案"},
-  "7-2-5": {"name": "存在對立感", "cue": "能在靈魂存在的議題上做出有意識的小選擇", "insight": "你感受到靈魂存在的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-2-6": {"name": "存在對立的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣", "insight": "你感受到靈魂存在的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "把你的存在洞見整理成一句話"},
-  "7-2-7": {"name": "存在對立的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人", "insight": "你感受到靈魂存在的衝擊，但現在只有二元覺察的視角在回應它，這個落差本身就很耗能。允許自己先停在感受裡，不用急著理解這麼大的議題。", "next": "把你的靈魂課題轉化成作品或服務"},
-  "7-3-1": {"name": "理解存在因果", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-3-2": {"name": "理解存在因果", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-3-3": {"name": "理解存在因果", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化", "insight": "你在靈魂存在的層面上，用因果連結的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-3-4": {"name": "理解存在因果", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在", "insight": "你在靈魂存在的層面上，用因果連結的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受此刻還不需要答案"},
-  "7-3-5": {"name": "理解存在因果", "cue": "能在靈魂存在的議題上做出有意識的小選擇", "insight": "你在靈魂存在的層面上，用因果連結的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-3-6": {"name": "理解存在因果的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣", "insight": "你在靈魂存在的層面上，用因果連結的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把你的存在洞見整理成一句話"},
-  "7-3-7": {"name": "理解存在因果的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人", "insight": "你在靈魂存在的層面上，用因果連結的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把你的靈魂課題轉化成作品或服務"},
-  "7-4-1": {"name": "探索靈魂核心", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考，且已能看見底層本質", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-4-2": {"name": "探索靈魂核心", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」，且已能看見底層本質", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-4-3": {"name": "探索靈魂核心", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化，且已能看見底層本質", "insight": "你在靈魂存在的層面上，用探索核心的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-4-4": {"name": "探索靈魂核心", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在，且已能看見底層本質", "insight": "你在靈魂存在的層面上，用探索核心的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受此刻還不需要答案"},
-  "7-4-5": {"name": "探索靈魂核心", "cue": "能在靈魂存在的議題上做出有意識的小選擇，且已能看見底層本質", "insight": "你在靈魂存在的層面上，用探索核心的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-4-6": {"name": "探索靈魂核心的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣，且已能看見底層本質", "insight": "你在靈魂存在的層面上，用探索核心的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把你的存在洞見整理成一句話"},
-  "7-4-7": {"name": "探索靈魂核心的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人，且已能看見底層本質", "insight": "你在靈魂存在的層面上，用探索核心的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把你的靈魂課題轉化成作品或服務"},
-  "7-5-1": {"name": "主動創造意義", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考，且開始主動設計改變", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-5-2": {"name": "主動創造意義", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」，且開始主動設計改變", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-5-3": {"name": "主動創造意義", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化，且開始主動設計改變", "insight": "你在靈魂存在的層面上，用主動創造的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-5-4": {"name": "主動創造意義", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在，且開始主動設計改變", "insight": "你在靈魂存在的層面上，用主動創造的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受此刻還不需要答案"},
-  "7-5-5": {"name": "主動創造意義", "cue": "能在靈魂存在的議題上做出有意識的小選擇，且開始主動設計改變", "insight": "你在靈魂存在的層面上，用主動創造的視角理解，整合到主動選擇的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-5-6": {"name": "主動創造意義的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣，且開始主動設計改變", "insight": "你在靈魂存在的層面上，用主動創造的視角理解，整合到穩定練習的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把你的存在洞見整理成一句話"},
-  "7-5-7": {"name": "主動創造意義的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人，且開始主動設計改變", "insight": "你在靈魂存在的層面上，用主動創造的視角理解，整合到轉化分享的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "把你的靈魂課題轉化成作品或服務"},
-  "7-6-1": {"name": "存在系統覺知", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考，且看見多個系統交織", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-6-2": {"name": "存在系統覺知", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」，且看見多個系統交織", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-6-3": {"name": "存在系統覺知", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化，且看見多個系統交織", "insight": "你在靈魂存在的層面上，用系統整合的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-6-4": {"name": "存在系統覺知", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在，且看見多個系統交織", "insight": "你在靈魂存在的層面上，用系統整合的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受此刻還不需要答案"},
-  "7-6-5": {"name": "存在系統覺知", "cue": "能在靈魂存在的議題上做出有意識的小選擇，且看見多個系統交織", "insight": "你在靈魂存在×系統整合×主動選擇的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-6-6": {"name": "存在系統覺知的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣，且看見多個系統交織", "insight": "你在靈魂存在×系統整合×穩定練習的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "把你的存在洞見整理成一句話"},
-  "7-6-7": {"name": "存在系統覺知的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人，且看見多個系統交織", "insight": "你在靈魂存在×系統整合×轉化分享的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "把你的靈魂課題轉化成作品或服務"},
-  "7-7-1": {"name": "活出靈魂課題", "cue": "被靈魂存在的議題淹沒，還沒辦法開始思考，且能精準命名自己的課題", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在被情緒吞沒，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下此刻你對存在最誠實的感受"},
-  "7-7-2": {"name": "活出靈魂課題", "cue": "剛開始說得出「我現在在靈魂存在的層面卡住了」，且能精準命名自己的課題", "insight": "你把問題看到靈魂存在的層面，視角很宏觀，但整合程度還在命名覺察，理解和生活之間有一段距離。這不是缺點，而是一個邀請：先把頭腦裡的洞見，帶回一個今天的小選擇。", "next": "寫下一個讓你感到困惑的存在問題"},
-  "7-7-3": {"name": "活出靈魂課題", "cue": "已經能理解自己在靈魂存在上的模式，但還在消化，且能精準命名自己的課題", "insight": "你在靈魂存在的層面上，用意義洞見的視角理解，整合到理解洞察的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "寫下你認為人為何而活的一個答案"},
-  "7-7-4": {"name": "活出靈魂課題", "cue": "不再批判自己有靈魂存在的問題，開始允許它存在，且能精準命名自己的課題", "insight": "你在靈魂存在的層面上，用意義洞見的視角理解，整合到接納允許的程度。這是一個有深度的位置——你已經不只是被情緒帶走，也開始看見更多。繼續往下一格移動就好。", "next": "接受此刻還不需要答案"},
-  "7-7-5": {"name": "活出靈魂課題", "cue": "能在靈魂存在的議題上做出有意識的小選擇，且能精準命名自己的課題", "insight": "你在靈魂存在×意義洞見×主動選擇的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "今天做一件讓你感覺有意義的小事"},
-  "7-7-6": {"name": "活出靈魂課題的轉化", "cue": "持續在靈魂存在上練習，漸漸形成新的習慣，且能精準命名自己的課題", "insight": "你在靈魂存在×意義洞見×穩定練習的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "把你的存在洞見整理成一句話"},
-  "7-7-7": {"name": "活出靈魂課題的轉化", "cue": "把靈魂存在的經驗轉化為洞見，願意陪伴他人，且能精準命名自己的課題", "insight": "你在靈魂存在×意義洞見×轉化分享的位置，這是整合度很高的狀態。你能看見系統、感受到意義，也開始把理解帶回生活。下一步是繼續穩定，並且考慮如何把這些分享出去。", "next": "把你的靈魂課題轉化成作品或服務"}
+// GitHub Pages safe helpers: localStorage shim + visible error fallback
+window.storage = window.storage || {
+  async get(key){
+    const value = localStorage.getItem(key);
+    return value == null ? null : { value };
+  },
+  async set(key, value){
+    localStorage.setItem(key, value);
+    return true;
+  }
 };
+window.addEventListener('error', function(e){
+  const box = document.createElement('div');
+  box.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;padding:12px 14px;border:1px solid rgba(251,191,36,.35);border-radius:12px;background:rgba(20,14,32,.96);color:#fbbf24;font:12px/1.6 sans-serif;white-space:pre-wrap;';
+  box.textContent='頁面初始化錯誤：\n' + (e.message || 'Unknown error') + '\n\n請截圖這段訊息，或先使用本修正版 index.html 重新發布。';
+  document.body.appendChild(box);
+});
 
-// ── AXIS LABELS ───────────────────────────────────────
 const XL=['身體當下','情緒心理','個人模式','關係互動','家庭成長','社會文化','靈魂存在'];
 const YL=['單一反應','二元覺察','因果連結','探索核心','主動創造','系統整合','意義洞見'];
 const ZL=['被情緒吞沒','命名覺察','理解洞察','接納允許','主動選擇','穩定練習','轉化分享'];
 
-// ── SITUATION DB (for distance matching) ─────────────
 const SITS=[
-  {emoji:'🌙',name:'過度熬夜',x:3,y:4,z:2,desc:'知道熬夜是補償機制，卻還是做不到早睡。身體的疲憊和頭腦的清醒形成衝突。',next:'今晚提前 30 分鐘關燈，不用睡著，只是躺著。'},
-  {emoji:'👔',name:'與主管互動',x:6,y:5,z:3,desc:'理解文化與權威結構，但回話還是不穩定。在被問到時身體會先凍結。',next:'準備一句緩衝話：「我確認一下再回覆你。」'},
-  {emoji:'💛',name:'金錢焦慮',x:7,y:4,z:2,desc:'理解錢與自由的課題，但現金流還沒更新。焦慮停在理解層，沒有行動。',next:'今天只更新一次帳戶，看一下數字就好。'},
-  {emoji:'🫀',name:'自我價值',x:5,y:6,z:4,desc:'看到原生家庭的影響，開始接納自己。知道批判來自舊模式，但有時還是被觸發。',next:'寫下 3 個今天對自己感謝的地方。'},
-  {emoji:'🧭',name:'轉職迷茫',x:5,y:5,z:3,desc:'知道想要改變，也看見了某些方向，但還沒有具體行動。',next:'列出一件這週可以做的最小探索行動。'},
-  {emoji:'🔗',name:'關係衝突',x:4,y:4,z:3,desc:'開始看見互動模式，知道對方觸發了什麼。情緒命名了，但還沒回話。',next:'在下次對話前，先把自己的需求寫下來。'},
-  {emoji:'⏳',name:'拖延卡關',x:3,y:3,z:2,desc:'知道在逃避，也知道逃避背後有什麼，但還是打不開那個文件。',next:'只打開，什麼都不用做，打開就算完成。'},
-  {emoji:'🌀',name:'焦慮漫延',x:2,y:2,z:1,desc:'身體緊繃，腦袋轉個不停，說不清楚在擔心什麼。',next:'慢慢呼吸三次，把腳踩在地板上感受重量。'},
-  {emoji:'✨',name:'創作瓶頸',x:3,y:5,z:3,desc:'知道自己想做什麼，也有很多想法，但下筆時會批判。完美主義擋著。',next:'給自己 15 分鐘，只寫爛草稿，不讀不改。'},
-  {emoji:'🌌',name:'人生意義',x:7,y:7,z:4,desc:'靈魂層面的問題浮現，思考存在意義與活著為了什麼。',next:'今天做一件讓你感覺活著的小事。'},
-  {emoji:'🕯',name:'燃燒殆盡',x:2,y:3,z:2,desc:'身體和情緒都在警告需要休息，理智知道，但停不下來。',next:'今天早一個小時結束工作，練習邊界。'},
-  {emoji:'🪞',name:'身份認同',x:5,y:6,z:3,desc:'在不同角色中感到分裂，不確定哪個才是真正的自己。',next:'寫下一件「只有你才會這樣」的事，哪怕很小。'},
+  {id:'overwork',emoji:'🌙',name:'過度熬夜',x:3,y:4,z:2,desc:'知道熬夜是補償機制，卻還是做不到早睡。身體的疲憊和頭腦的清醒形成衝突。',next:'今晚提前 30 分鐘關燈，不用睡著，只是躺著。'},
+  {id:'boss',emoji:'👔',name:'與主管互動',x:6,y:5,z:3,desc:'理解文化與權威結構，但回話還是不穩定。在被問到時身體會先凍結。',next:'準備一句緩衝話：「我確認一下再回覆你。」'},
+  {id:'money',emoji:'💛',name:'金錢焦慮',x:7,y:4,z:2,desc:'理解錢與自由的課題，但現金流還沒更新。焦慮停在理解層，沒有行動。',next:'今天只更新一次帳戶，看一下數字就好。'},
+  {id:'selfworth',emoji:'🫀',name:'自我價值',x:5,y:6,z:4,desc:'看到原生家庭的影響，開始接納自己。知道批判來自舊模式，但有時還是被觸發。',next:'寫下 3 個今天對自己感謝的地方。'},
+  {id:'transition',emoji:'🧭',name:'轉職迷茫',x:5,y:5,z:3,desc:'知道想要改變，也看見了某些方向，但還沒有具體行動。',next:'列出一件這週可以做的最小探索行動。'},
+  {id:'relationship',emoji:'🔗',name:'關係衝突',x:4,y:4,z:3,desc:'開始看見互動模式，知道對方觸發了什麼。情緒命名了，但還沒回話。',next:'在下次對話前，先把自己的需求寫下來。'},
+  {id:'procrastinate',emoji:'⏳',name:'拖延卡關',x:3,y:3,z:2,desc:'知道在逃避，也知道逃避背後有什麼，但還是打不開那個文件。',next:'只打開，什麼都不用做，打開就算完成。'},
+  {id:'anxiety',emoji:'🌀',name:'焦慮漫延',x:2,y:2,z:1,desc:'身體緊繃，腦袋轉個不停，說不清楚在擔心什麼。',next:'慢慢呼吸三次，把腳踩在地板上感受重量。'},
+  {id:'creative',emoji:'✨',name:'創作瓶頸',x:3,y:5,z:3,desc:'知道自己想做什麼，也有很多想法，但下筆時會批判。完美主義擋著。',next:'給自己 15 分鐘，只寫爛草稿，不讀不改。'},
+  {id:'purpose',emoji:'🌌',name:'人生意義',x:7,y:7,z:4,desc:'靈魂層面的問題浮現，思考存在意義與活著為了什麼。',next:'今天做一件讓你感覺活著的小事。'},
+  {id:'burnout',emoji:'🕯',name:'燃燒殆盡',x:2,y:3,z:2,desc:'身體和情緒都在警告需要休息，理智知道，但停不下來。',next:'今天早一個小時結束工作，練習邊界。'},
+  {id:'identity',emoji:'🪞',name:'身份認同',x:5,y:6,z:3,desc:'在不同角色中感到分裂，不確定哪個才是真正的自己。',next:'寫下一件「只有你才會這樣」的事，哪怕很小。'},
 ];
 
 function matchSits(rx,ry,rz){
@@ -750,469 +396,368 @@ function matchSits(rx,ry,rz){
   }).sort((a,b)=>a.dist-b.dist);
 }
 
-// ── GOOGLE OAUTH + GEMINI ────────────────────────────
-// Replace with your OAuth Client ID from Google Cloud Console
-// console.cloud.google.com → APIs & Services → Credentials → OAuth Client ID
-const GOOGLE_CLIENT_ID = '86116091821-sa9sv3g2kk7ailenm03uo0p6v4bs38tv.apps.googleusercontent.com';
-
-let googleToken = null;
-let tokenExpiry = 0;
-
-function initGoogleAuth() {
-  // Google Identity Services library must be loaded
-  if (typeof google === 'undefined') return;
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleCredential,
-    auto_select: false,
-  });
-}
-
-function signIn() {
-  if (typeof google === 'undefined') {
-    alert('Google 登入載入中，請稍後再試。');
-    return;
-  }
-  // Request OAuth token for Gemini API scope
-  const client = google.accounts.oauth2.initTokenClient({
-    client_id: GOOGLE_CLIENT_ID,
-    scope: 'https://www.googleapis.com/auth/generative-language.retriever openid email profile',
-    callback: (resp) => {
-      if (resp.error) { alert('登入失敗：' + resp.error); return; }
-      googleToken = resp.access_token;
-      tokenExpiry = Date.now() + (resp.expires_in - 60) * 1000;
-      fetchUserProfile(googleToken);
-    },
-  });
-  client.requestAccessToken({ prompt: 'consent' });
-}
-
-function signOut() {
-  googleToken = null; tokenExpiry = 0;
-  document.getElementById('auth-signed-in').style.display = 'none';
-  document.getElementById('auth-signed-out').style.display = '';
-  if (typeof google !== 'undefined') google.accounts.oauth2.revoke(googleToken, () => {});
-}
-
-async function fetchUserProfile(token) {
-  try {
-    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: { Authorization: 'Bearer ' + token }
-    });
-    const p = await res.json();
-    document.getElementById('auth-avatar').src = p.picture || '';
-    document.getElementById('auth-name').textContent = p.name || p.email || '';
-    document.getElementById('auth-signed-out').style.display = 'none';
-    document.getElementById('auth-signed-in').style.display = '';
-  } catch(e) {
-    // Still allow usage even if profile fetch fails
-    document.getElementById('auth-signed-out').style.display = 'none';
-    document.getElementById('auth-signed-in').style.display = '';
-    document.getElementById('auth-name').textContent = '已登入';
-  }
-}
-
-function isSignedIn() {
-  return googleToken && Date.now() < tokenExpiry;
-}
-
-// ── GEMINI CALL ───────────────────────────────────────
-async function callAI(prompt) {
-  if (!isSignedIn()) {
-    // Token expired — re-prompt
-    signIn();
-    throw new Error('請先登入 Google 帳號');
-  }
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + googleToken
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 1400,
-        responseMimeType: 'application/json'
-      }
-    })
-  });
-  if (!res.ok) {
-    const e = await res.json();
-    throw new Error(e.error?.message || 'Gemini API error ' + res.status);
-  }
-  const d = await res.json();
-  return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
-}
-
-// ── BG STARS ─────────────────────────────────────────
+// ── BG STARS ──
 const bgC=document.getElementById('bgc'),bgX=bgC.getContext('2d');
 let bgS=[];
-function initBg(){
-  bgC.width=window.innerWidth;bgC.height=window.innerHeight;
-  bgS=Array.from({length:140},()=>({
-    x:Math.random()*bgC.width,y:Math.random()*bgC.height,
-    r:Math.random()*1.3+.15,ph:Math.random()*Math.PI*2,
-    sp:Math.random()*.0025+.0008,
-    hue:Math.random()<.35?(Math.random()<.5?272:315):0,
-    twinkle:Math.random()>.65
-  }));
-}
-function drawBg(t){
-  bgX.clearRect(0,0,bgC.width,bgC.height);
-  bgS.forEach(s=>{
-    const a=s.twinkle?.08+.55*(.5+.5*Math.sin(t*s.sp*1000+s.ph)):.08+.2*(.5+.5*Math.sin(t*s.sp*400+s.ph));
-    bgX.beginPath();bgX.arc(s.x,s.y,s.r,0,Math.PI*2);
-    bgX.fillStyle=s.hue?`hsla(${s.hue},60%,80%,${a})`:`rgba(255,255,255,${a})`;
-    bgX.fill();
-  });
-  requestAnimationFrame(ts=>drawBg(ts/1000));
-}
-initBg();window.addEventListener('resize',initBg);
-requestAnimationFrame(ts=>drawBg(ts/1000));
+function initBg(){bgC.width=window.innerWidth;bgC.height=window.innerHeight;bgS=Array.from({length:110},()=>({x:Math.random()*bgC.width,y:Math.random()*bgC.height,r:Math.random()*1.2+.15,ph:Math.random()*Math.PI*2,sp:Math.random()*.003+.001,hue:Math.random()<.3?(Math.random()<.5?275:315):0}));}
+function drawBg(t){bgX.clearRect(0,0,bgC.width,bgC.height);bgS.forEach(s=>{const a=.1+.48*(.5+.5*Math.sin(t*s.sp*1000+s.ph));bgX.beginPath();bgX.arc(s.x,s.y,s.r,0,Math.PI*2);bgX.fillStyle=s.hue?`hsla(${s.hue},55%,78%,${a})`:`rgba(255,255,255,${a})`;bgX.fill();});requestAnimationFrame(ts=>drawBg(ts/1000));}
+initBg();window.addEventListener('resize',initBg);requestAnimationFrame(ts=>drawBg(ts/1000));
 
-// ── COORD SVG ────────────────────────────────────────
+// ── COORD SVG ──
 const SVG_NS='http://www.w3.org/2000/svg';
 const svg=document.getElementById('coord-svg');
 let glowRaf=null;
-const OX=155,OY=200;
+
+// Isometric 3D axes layout, viewBox 360x270
+const OX=145,OY=180; // origin
 const DIRS={
-  x:{dx:2.2,dy:0.65,color:'#c084fc',color2:'#d8b4fe',label:'X',sub:'問題規模'},
-  y:{dx:0,  dy:-2.1,color:'#f472b6',color2:'#fda4af',label:'Y',sub:'意識維度'},
-  z:{dx:-1.6,dy:0.58,color:'#34d399',color2:'#6ee7b7',label:'Z',sub:'整合程度'},
+  x:{dx:2.1,dy:0.6,color:'#c084fc',label:'X',sub:'問題規模'},
+  y:{dx:0,  dy:-1.9,color:'#f472b6',label:'Y',sub:'意識維度'},
+  z:{dx:-1.5,dy:0.55,color:'#34d399',label:'Z',sub:'整合程度'},
 };
 const STEP=17;
-function axPt(ax,lv){const d=DIRS[ax],t=lv-1;return{x:OX+d.dx*STEP*t,y:OY+d.dy*STEP*t};}
+
+function axPt(ax,lv){
+  const d=DIRS[ax],t=lv-1;
+  return{x:OX+d.dx*STEP*t, y:OY+d.dy*STEP*t};
+}
 function mkEl(tag,attrs,text){
   const el=document.createElementNS(SVG_NS,tag);
   Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));
-  if(text!=null)el.textContent=text;return el;
+  if(text!=null)el.textContent=text;
+  return el;
 }
 
 function buildSVG(r){
-  svg.innerHTML='';cancelAnimationFrame(glowRaf);
+  svg.innerHTML='';
+  cancelAnimationFrame(glowRaf);
+
+  // defs: dreamy gradients, glow, arrowheads
   const defs=mkEl('defs',{});
-  ['gx','gy','gz','gc'].forEach((id,i)=>{
-    const sd=['4','3.5','4','5'][i];
-    const f=mkEl('filter',{id,x:'-120%',y:'-120%',width:'340%',height:'340%'});
-    const fe=mkEl('feGaussianBlur',{'in':'SourceGraphic',stdDeviation:sd,result:'b'});
+
+  const axisGradients=[
+    ['grad-x','#d8b4fe','#60a5fa'],
+    ['grad-y','#f9a8d4','#fb7185'],
+    ['grad-z','#a7f3d0','#34d399'],
+    ['grad-center','#fff7ed','#fbbf24']
+  ];
+  axisGradients.forEach(([id,c1,c2])=>{
+    const g=mkEl('linearGradient',{id,x1:'0%',y1:'0%',x2:'100%',y2:'100%'});
+    g.appendChild(mkEl('stop',{offset:'0%','stop-color':c1,'stop-opacity':'1'}));
+    g.appendChild(mkEl('stop',{offset:'100%','stop-color':c2,'stop-opacity':'1'}));
+    defs.appendChild(g);
+  });
+
+  ['gx','gy','gz','gc','soft'].forEach(id=>{
+    const f=mkEl('filter',{id,x:'-140%',y:'-140%',width:'380%',height:'380%'});
+    const fe=mkEl('feGaussianBlur',{'in':'SourceGraphic',stdDeviation:id==='soft'?'5.5':'3.8',result:'b'});
     const fm=mkEl('feMerge',{});
     fm.appendChild(mkEl('feMergeNode',{'in':'b'}));
     fm.appendChild(mkEl('feMergeNode',{'in':'SourceGraphic'}));
     f.appendChild(fe);f.appendChild(fm);defs.appendChild(f);
   });
-  ['x','y','z'].forEach(ax=>{
-    const d=DIRS[ax];
-    const g=mkEl('linearGradient',{id:`lg-${ax}`,gradientUnits:'userSpaceOnUse',
-      x1:OX,y1:OY,x2:axPt(ax,7).x,y2:axPt(ax,7).y});
-    g.appendChild(mkEl('stop',{'offset':'0%','stop-color':d.color,'stop-opacity':'0.06'}));
-    g.appendChild(mkEl('stop',{'offset':'55%','stop-color':d.color,'stop-opacity':'0.55'}));
-    g.appendChild(mkEl('stop',{'offset':'100%','stop-color':d.color2,'stop-opacity':'0.92'}));
-    defs.appendChild(g);
+
+  Object.entries(DIRS).forEach(([ax,d])=>{
+    const marker=mkEl('marker',{id:`arrow-${ax}`,viewBox:'0 0 10 10',refX:'8.5',refY:'5',markerWidth:'5',markerHeight:'5',orient:'auto-start-reverse'});
+    marker.appendChild(mkEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:d.color,opacity:'.88'}));
+    defs.appendChild(marker);
   });
   svg.appendChild(defs);
 
-  for(let i=0;i<38;i++){
-    const cx2=5+Math.random()*370,cy2=5+Math.random()*290;
-    const ra=Math.random()*1.4+.2;
-    const aa=(Math.random()*.16+.04).toFixed(2);
-    const hue2=Math.random()<.4?(Math.random()<.5?'272,55%,75%':'315,55%,75%'):'0,0%,100%';
-    svg.appendChild(mkEl('circle',{cx:cx2,cy:cy2,r:ra,fill:`hsla(${hue2},${aa})`}));
+  // soft nebula stars in coordinate area
+  for(let i=0;i<42;i++){
+    const warm=Math.random()<.28;
+    const c=mkEl('circle',{cx:12+Math.random()*336,cy:10+Math.random()*250,r:Math.random()*1.35+.25,fill:warm?`rgba(251,207,232,${(Math.random()*.26+.08).toFixed(2)})`:`rgba(255,255,255,${(Math.random()*.23+.05).toFixed(2)})`});
+    svg.appendChild(c);
   }
-  [90,62,36].forEach((r2,i)=>{
-    const op=[0.02,0.035,0.055][i];
-    svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:r2,fill:'none',stroke:`rgba(192,132,252,${op})`,'stroke-width':'1'}));
+
+  // luminous ground / perspective rings
+  [22,38,56,76,98,122].forEach((rr,i)=>{
+    const c=mkEl('ellipse',{cx:OX,cy:OY+4,rx:rr,ry:rr*.34,fill:'none',stroke:i%2?'rgba(255,255,255,.055)':'rgba(192,132,252,.105)','stroke-width':i<2?'.9':'.65'});
+    svg.appendChild(c);
   });
 
+  // vertical light pillar and meditative origin glow
+  const pillar=mkEl('line',{x1:OX,y1:OY+18,x2:OX,y2:32,stroke:'rgba(167,243,208,.28)','stroke-width':'2.2','stroke-linecap':'round',filter:'url(#soft)'});
+  svg.appendChild(pillar);
+  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'18',fill:'rgba(251,191,36,.13)',filter:'url(#soft)'}));
+  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'7',fill:'rgba(255,247,237,.82)',filter:'url(#gc)'}));
+
+  // axes: layered glow + solid arrow line + magical ticks
   Object.entries(DIRS).forEach(([ax,d])=>{
-    const end=axPt(ax,7.7);
-    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:end.x,y2:end.y,
-      stroke:`url(#lg-${ax})`,'stroke-width':'1.6','stroke-dasharray':'4,5',filter:`url(#g${ax})`}));
+    const end=axPt(ax,7.35);
+    const grad=ax==='x'?'grad-x':ax==='y'?'grad-y':'grad-z';
+
+    // outer aura
+    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:end.x,y2:end.y,stroke:d.color+'24','stroke-width':'8','stroke-linecap':'round',filter:'url(#soft)'}));
+    // subtle trail
+    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:end.x,y2:end.y,stroke:`url(#${grad})`,'stroke-width':'2.1','stroke-linecap':'round','marker-end':`url(#arrow-${ax})`,opacity:'.9'}));
+    // tiny dotted stardust on axis
     for(let lv=1;lv<=7;lv++){
       const p=axPt(ax,lv);
-      svg.appendChild(mkEl('circle',{cx:p.x,cy:p.y,r:'2.5',fill:d.color+'55'}));
+      const halo=mkEl('circle',{cx:p.x,cy:p.y,r:'7.2',fill:d.color+'12',filter:'url(#soft)'});
+      svg.appendChild(halo);
+      const dot=mkEl('circle',{cx:p.x,cy:p.y,r:lv===1?'3.6':'3.2',fill:`url(#${grad})`,stroke:'rgba(255,255,255,.42)','stroke-width':'.55',filter:`url(#g${ax})`});
+      svg.appendChild(dot);
+
+      // small four-point sparkle for each tick
+      const sparkle=mkEl('path',{d:`M ${p.x} ${p.y-5} L ${p.x+1.25} ${p.y-1.25} L ${p.x+5} ${p.y} L ${p.x+1.25} ${p.y+1.25} L ${p.x} ${p.y+5} L ${p.x-1.25} ${p.y+1.25} L ${p.x-5} ${p.y} L ${p.x-1.25} ${p.y-1.25} Z`,fill:'rgba(255,255,255,.36)'});
+      svg.appendChild(sparkle);
+
       let tx=p.x,ty=p.y;
-      if(ax==='x'){tx+=1;ty+=13;}else if(ax==='y'){tx+=11;ty+=4;}else{tx-=11;ty+=13;}
-      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:d.color+'55','font-size':'8',
-        'text-anchor':'middle','font-family':'Noto Serif TC,serif'},lv));
+      if(ax==='x'){tx+=2;ty+=15;}else if(ax==='y'){tx+=13;ty+=4;}else{tx-=13;ty+=15;}
+      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:'rgba(255,255,255,.72)','font-size':'9.5','text-anchor':'middle','font-family':'Noto Serif TC,serif','font-weight':'500'},lv));
     }
+
+    // axis label at end, larger and clearer on mobile
     const lp=axPt(ax,7);
     let lx=lp.x,ly=lp.y;
-    if(ax==='x'){lx+=18;ly+=3;}else if(ax==='y'){lx+=18;ly+=1;}else{lx-=18;ly+=3;}
-    const gTxt=mkEl('text',{x:lx,y:ly,fill:d.color,'font-size':'12','text-anchor':'middle',
-      'font-family':'Noto Serif TC,serif','font-weight':'300',filter:`url(#g${ax})`,'opacity':'.55'});
-    gTxt.textContent=d.label;svg.appendChild(gTxt);
-    const mTxt=mkEl('text',{x:lx,y:ly,fill:d.color2,'font-size':'12','text-anchor':'middle',
-      'font-family':'Noto Serif TC,serif','font-weight':'300'});
-    mTxt.textContent=d.label;svg.appendChild(mTxt);
-    svg.appendChild(mkEl('text',{x:lx,y:ly+12,fill:d.color+'66','font-size':'8',
-      'text-anchor':'middle','font-family':'Noto Sans TC,sans-serif'},d.sub));
+    if(ax==='x'){lx+=20;ly+=3;}else if(ax==='y'){lx+=18;ly-=5;}else{lx-=20;ly+=3;}
+    svg.appendChild(mkEl('text',{x:lx,y:ly,fill:d.color,'font-size':'14','text-anchor':'middle','font-family':'Noto Serif TC,serif','font-weight':'500',filter:`url(#g${ax})`},d.label));
+    svg.appendChild(mkEl('text',{x:lx,y:ly+13,fill:'rgba(255,255,255,.6)','font-size':'9.2','text-anchor':'middle','font-family':'Noto Sans TC,sans-serif'},d.sub));
   });
 
-  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'4',fill:'rgba(255,255,255,.15)',filter:'url(#gc)'}));
-  svg.appendChild(mkEl('circle',{cx:OX,cy:OY,r:'2.5',fill:'rgba(255,255,255,.5)'}));
+  if(!r){
+    document.getElementById('coord-hint').textContent='✦ 輸入狀態後，座標點將在此亮起';
+    return;
+  }
 
-  if(!r){document.getElementById('coord-hint').textContent='✦ 輸入狀態後，座標點將在此亮起';return;}
-
-  const pts={x:axPt('x',r.x),y:axPt('y',r.y),z:axPt('z',r.z)};
-  Object.entries(pts).forEach(([ax,p])=>{
+  // result connector lines, brighter but still soft
+  ['x','y','z'].forEach(ax=>{
+    const p=axPt(ax,r[ax]);
     const col=DIRS[ax].color;
-    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:p.x,y2:p.y,stroke:col+'28','stroke-width':'4',filter:`url(#g${ax})`}));
-    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:p.x,y2:p.y,stroke:col+'65','stroke-width':'1.8'}));
+    svg.appendChild(mkEl('line',{x1:OX,y1:OY,x2:p.x,y2:p.y,stroke:col+'75','stroke-width':'2.35','stroke-linecap':'round',filter:`url(#g${ax})`}));
   });
 
-  const centX=(pts.x.x+pts.y.x+pts.z.x)/3;
-  const centY=(pts.x.y+pts.y.y+pts.z.y)/3;
+  const px=axPt('x',r.x),py=axPt('y',r.y),pz=axPt('z',r.z);
+  const centX=(px.x+py.x+pz.x)/3, centY=(px.y+py.y+pz.y)/3;
 
-  [{pt:pts.x,col:DIRS.x.color,col2:DIRS.x.color2,fid:'gx',ax:'x',lv:r.x},
-   {pt:pts.y,col:DIRS.y.color,col2:DIRS.y.color2,fid:'gy',ax:'y',lv:r.y},
-   {pt:pts.z,col:DIRS.z.color,col2:DIRS.z.color2,fid:'gz',ax:'z',lv:r.z},
-   {pt:{x:centX,y:centY},col:'#ffffff',col2:'#ffffff',fid:'gc',ax:'c',lv:null},
-  ].forEach(s=>{
-    const isC=s.ax==='c',baseR=isC?3.5:5;
-    const ring=mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:isC?14:11,
-      fill:'none',stroke:s.col+'20','stroke-width':'1'});
-    ring.classList.add('rring');svg.appendChild(ring);
-    svg.appendChild(mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:isC?10:9,fill:s.col+'15',filter:`url(#${s.fid})`}));
-    const core=mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:baseR,fill:s.col2});
-    core.classList.add('rstar');core.setAttribute('data-ax',s.ax);
-    if(s.lv)core.setAttribute('data-lv',s.lv);
-    svg.appendChild(core);
-    if(!isC){
+  const starDefs=[
+    {pt:px,col:DIRS.x.color,fid:'gx',ax:'x',lv:r.x,grad:'grad-x'},
+    {pt:py,col:DIRS.y.color,fid:'gy',ax:'y',lv:r.y,grad:'grad-y'},
+    {pt:pz,col:DIRS.z.color,fid:'gz',ax:'z',lv:r.z,grad:'grad-z'},
+    {pt:{x:centX,y:centY},col:'#fff7ed',fid:'gc',ax:'c',lv:null,grad:'grad-center'},
+  ];
+
+  starDefs.forEach(s=>{
+    svg.appendChild(mkEl('circle',{cx:s.pt.x,cy:s.pt.y,r:s.ax==='c'?'13':'12',fill:s.col+'24',filter:`url(#${s.fid})`}));
+    const star=mkEl('path',{d:`M ${s.pt.x} ${s.pt.y-7} L ${s.pt.x+2.1} ${s.pt.y-2.1} L ${s.pt.x+7} ${s.pt.y} L ${s.pt.x+2.1} ${s.pt.y+2.1} L ${s.pt.x} ${s.pt.y+7} L ${s.pt.x-2.1} ${s.pt.y+2.1} L ${s.pt.x-7} ${s.pt.y} L ${s.pt.x-2.1} ${s.pt.y-2.1} Z`,fill:`url(#${s.grad})`,stroke:'rgba(255,255,255,.62)','stroke-width':'.75',filter:`url(#${s.fid})`});
+    star.classList.add('rstar');star.setAttribute('data-ax',s.ax);if(s.lv)star.setAttribute('data-lv',s.lv);
+    svg.appendChild(star);
+
+    if(s.ax!=='c'){
       let tx=s.pt.x,ty=s.pt.y;
-      if(s.ax==='x'){ty+=17;}else if(s.ax==='y'){tx+=20;ty+=4;}else{tx-=14;ty+=17;}
-      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:s.col2,'font-size':'9.5',
-        'text-anchor':'middle','font-family':'Noto Sans TC,sans-serif'},`${s.ax.toUpperCase()}${s.lv}`));
+      if(s.ax==='x'){ty+=17;}else if(s.ax==='y'){tx+=21;ty+=4;}else{tx-=15;ty+=17;}
+      svg.appendChild(mkEl('text',{x:tx,y:ty,fill:s.col,'font-size':'10.5','text-anchor':'middle','font-family':'Noto Sans TC,sans-serif','font-weight':'500'},`${s.ax.toUpperCase()}${s.lv}`));
     } else {
-      svg.appendChild(mkEl('text',{x:centX,y:centY-14,fill:'rgba(255,255,255,.52)',
-        'font-size':'9','text-anchor':'middle','font-family':'Noto Serif TC,serif'},`X${r.x}/Y${r.y}/Z${r.z}`));
+      svg.appendChild(mkEl('text',{x:centX,y:centY-14,fill:'rgba(255,247,237,.76)','font-size':'9.5','text-anchor':'middle','font-family':'Noto Serif TC,serif'},`X${r.x}/Y${r.y}/Z${r.z}`));
     }
   });
 
   let t2=0;
   function animStars(){
     svg.querySelectorAll('.rstar').forEach((s,i)=>{
-      const isC=s.getAttribute('data-ax')==='c',base=isC?3.5:5;
-      const pulse=.62+.38*Math.sin(t2*1.7+i*1.15);
-      s.setAttribute('r',base*pulse);s.style.opacity=.55+.45*pulse;
+      s.style.opacity=.76+.24*Math.sin(t2*1.6+i);
     });
-    svg.querySelectorAll('.rring').forEach((rr,i)=>{
-      const isC=i===3,base=isC?14:11;
-      const pulse=.5+.5*Math.sin(t2*1.2+i*.8);
-      rr.setAttribute('r',base+3*pulse);rr.style.opacity=.06+.12*pulse;
-    });
-    t2+=0.038;glowRaf=requestAnimationFrame(animStars);
+    t2+=0.04;
+    glowRaf=requestAnimationFrame(animStars);
   }
   animStars();
   document.getElementById('coord-hint').textContent='✦ 點擊星點查看說明';
 }
 
+// star click
 svg.addEventListener('click',e=>{
   const t=e.target;if(!t.classList.contains('rstar'))return;
   const ax=t.getAttribute('data-ax');
   if(ax==='c'){
     document.getElementById('sm-t').textContent='你的三軸交會點';
-    document.getElementById('sm-b').textContent='這顆星是你 X・Y・Z 三軸座標的空間中心點。\n\n它代表你此刻的整體狀態交叉點，是你目前在覺察座標系中真實所在的位置。';
+    document.getElementById('sm-b').textContent=`這顆星是你 X・Y・Z 三軸座標的空間中心點。\n\n它代表你此刻的整體狀態交叉點，是你目前在這個覺察座標系中真實所在的位置。`;
   } else {
     const lv=parseInt(t.getAttribute('data-lv'));
     const labels={x:XL,y:YL,z:ZL};
     const names={x:'問題規模',y:'意識維度',z:'整合程度'};
-    const dd={x:`你把問題放在「${XL[lv-1]}」的規模裡看。`,
-              y:`你目前的意識視角在「${YL[lv-1]}」。`,
-              z:`你目前的整合落地狀態：「${ZL[lv-1]}」。`};
+    const descs={
+      x:`你把問題放在「${XL[lv-1]}」的規模裡看。`,
+      y:`你目前的意識視角在「${YL[lv-1]}」。`,
+      z:`你目前的整合落地狀態：「${ZL[lv-1]}」。`
+    };
     document.getElementById('sm-t').textContent=`${ax.toUpperCase()}${lv} · ${labels[ax][lv-1]}`;
-    document.getElementById('sm-b').textContent=`${names[ax]} 第 ${lv} 格\n\n${dd[ax]}`;
+    document.getElementById('sm-b').textContent=`${names[ax]} 第 ${lv} 格\n\n${descs[ax]}`;
   }
   document.getElementById('sm-wrap').classList.add('on');
 });
+
 buildSVG(null);
 
-// ── TAB ──────────────────────────────────────────────
-function tab(id){
-  ['loc','his'].forEach(t=>{
-    document.getElementById('tb-'+t)?.classList.toggle('on',t===id);
-    document.getElementById('sec-'+t)?.classList.toggle('on',t===id);
-    document.getElementById('nav-'+t)?.classList.toggle('on',t===id);
-  });
-  if(id==='his')renderHis();
+// ── TAB ──
+function tab(id){['loc','his'].forEach(t=>{document.getElementById('tb-'+t)?.classList.toggle('on',t===id);document.getElementById('sec-'+t)?.classList.toggle('on',t===id);document.getElementById('nav-'+t)?.classList.toggle('on',t===id);});if(id==='his')renderHis();}
+
+// ── ANALYZE ──
+let last=null;
+function clamp7(n){return Math.max(1,Math.min(7,Number(n)||1));}
+function localAnalyze(inp,note){
+  const t=(inp+' '+(note||'')).toLowerCase();
+  const has=(arr)=>arr.some(k=>t.includes(k));
+  let x=3,y=3,z=2;
+  if(has(['主管','權威','公司','職場','制度','社會','文化','工作'])) x=Math.max(x,6);
+  if(has(['家庭','父母','原生','小時候','童年'])) x=Math.max(x,5);
+  if(has(['關係','朋友','伴侶','喜歡','封鎖','衝突'])) x=Math.max(x,4);
+  if(has(['人生','意義','靈魂','存在','自由','自在'])) x=7;
+  if(has(['身體','胸口','胃','呼吸','腰','頭','睡','累','痛'])) x=Math.min(x,2);
+
+  if(has(['底層','模式','原因','為什麼','覺察','理解'])) y=Math.max(y,4);
+  if(has(['系統','循環','結構','互相影響'])) y=Math.max(y,6);
+  if(has(['意義','課題','靈魂','高我'])) y=Math.max(y,7);
+  if(has(['我想','我要','選擇','設計','行動'])) y=Math.max(y,5);
+  if(has(['爆炸','崩潰','很怕','想逃','焦慮','緊繃'])) y=Math.min(Math.max(y,2),4);
+
+  if(has(['吞沒','崩潰','爆炸','不知道','想逃','當機'])) z=1;
+  if(has(['我知道','命名','感覺是','我現在'])) z=Math.max(z,2);
+  if(has(['理解','看見','模式','因果'])) z=Math.max(z,3);
+  if(has(['接納','允許','不批判','陪自己'])) z=Math.max(z,4);
+  if(has(['行動','今天','下一步','準備','練習'])) z=Math.max(z,5);
+  if(has(['穩定','每天','習慣','持續'])) z=Math.max(z,6);
+  if(has(['分享','幫助他人','轉化'])) z=Math.max(z,7);
+
+  x=clamp7(x);y=clamp7(y);z=clamp7(z);
+  return {
+    x,y,z,
+    summary:`目前在 ${XL[x-1]} 中尋找下一步`,
+    xi:`你現在不是只在處理單一事件，而是在看見它背後牽動的「${XL[x-1]}」層級。先不用急著把整個問題一次解完，先把它縮小成今天能處理的一格。`,
+    yi:`你的視角目前接近「${YL[y-1]}」。這代表你已經不只是反應，而是開始嘗試理解自己怎麼被觸發、怎麼選擇。`,
+    zi:`整合程度落在「${ZL[z-1]}」。現在最重要的不是逼自己完美，而是讓身體和行動跟上你已經知道的事。`,
+    next:'先做一件最小行動',
+    remind:'你不用一次變好，先回到自己。',
+    sub_ext:'這個座標提醒你：不要只停在分析，也不要急著跳到巨大改變。先找到一個小到不會抗拒的行動，讓新的自己有地方開始。',
+    body_s:'先把注意力放回身體：腳踩地、慢慢吐氣、放鬆肩頸。身體安定一點，思考才不會全部擠在腦中。',
+    mind_s:'把現在的情緒命名，不急著說服自己。你可以問：我現在最怕的是什麼？我真正需要的是什麼？',
+    spirit_s:'從更大的視角看，這不是你失敗，而是你正在學會用新的方式陪自己過關。你不是卡住，你是在重新定位。'
+  };
 }
 
-// ── MAIN ANALYZE ─────────────────────────────────────
-let last=null;
 async function go(){
   const inp=document.getElementById('inp').value.trim();
   const note=document.getElementById('note').value.trim();
   if(!inp)return document.getElementById('inp').focus();
-
-  if (!isSignedIn()) {
-    document.getElementById('auth-bar').scrollIntoView({behavior:'smooth',block:'center'});
-    signIn();
-    return;
-  }
-
   document.getElementById('btn-go').disabled=true;
   document.getElementById('loading').classList.add('on');
   document.getElementById('result').classList.remove('on');
-
-  const prompt=`你是覺察座標系統分析師。根據用戶描述輸出JSON，不加任何其他文字。
-
-X軸問題規模(1-7)：1身體當下 2情緒心理 3個人模式 4關係互動 5家庭成長 6社會文化 7靈魂存在
-Y軸意識維度(1-7)：1單一反應 2二元覺察 3因果連結 4探索核心 5主動創造 6系統整合 7意義洞見
-Z軸整合程度(1-7)：1被情緒吞沒 2命名覺察 3理解洞察 4接納允許 5主動選擇 6穩定練習 7轉化分享
-
-用戶：「${inp}」${note?`\n備註：「${note}」`:''}
-
-輸出JSON：
-{"x":數字,"y":數字,"z":數字,
-"confidence":0到100的整數（你對這次XYZ分類的把握程度，基於用戶描述的明確性），
-"confidence_note":"用一句話說明信心度高低的原因（如：描述清晰具體 / 描述較模糊難以判定）",
-"summary":"一句話定位20字以內",
-"xi":"X軸洞察2-3句溫柔具體",
-"yi":"Y軸洞察2-3句",
-"zi":"Z軸洞察2-3句",
-"next":"今天唯一最小具體行動15字以內",
-"remind":"一句溫柔提醒真實看見非鼓勵口號20字以內",
-"sub_ext":"從這個座標有什麼值得注意的模式2-3句溫柔直接",
-"body_s":"身體面向建議2-3句從感官出發",
-"mind_s":"心理面向建議2-3句從情緒認知出發",
-"spirit_s":"靈性面向建議2-3句從更大視角出發"}`;
-
   try{
-    const txt=await callAI(prompt);
-    const r=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    r.input=inp;r.note=note;r.ts=Date.now();
-    last=r;showResult(r);
+    // GitHub Pages 修正版：不在前端直連 Anthropic API，避免 CORS / API key / 空白頁問題。
+    const r=localAnalyze(inp,note);
+    r.input=inp;r.note=note;r.ts=Date.now();last=r;showResult(r);
   }catch(e){
-    alert('分析失敗：'+e.message+'\n\n請確認網路，或稍後再試。');
-    console.error(e);
+    alert('分析失敗：' + (e.message || e));console.error(e);
   }finally{
     document.getElementById('loading').classList.remove('on');
     document.getElementById('btn-go').disabled=false;
   }
 }
 
-// ── SHOW RESULT ───────────────────────────────────────
 function showResult(r){
   buildSVG(r);
 
-  // axis chips + confidence
+  // chips
   const ar=document.getElementById('axis-row');ar.innerHTML='';
-  [{v:r.x,lbl:XL[r.x-1],cls:'xc',pre:'X'},
-   {v:r.y,lbl:YL[r.y-1],cls:'yc',pre:'Y'},
-   {v:r.z,lbl:ZL[r.z-1],cls:'zc',pre:'Z'}].forEach(c=>{
+  [{v:r.x,lbl:XL[r.x-1],cls:'xc',pre:'X'},{v:r.y,lbl:YL[r.y-1],cls:'yc',pre:'Y'},{v:r.z,lbl:ZL[r.z-1],cls:'zc',pre:'Z'}].forEach(c=>{
     ar.innerHTML+=`<div class="ax-chip ${c.cls} anim"><strong>${c.pre}${c.v}</strong><span class="ax-chip-sub">${c.lbl}</span></div>`;
   });
-  const conf = r.confidence || 0;
-  const confColor = conf>=80?'var(--pz)':conf>=60?'var(--gold)':'var(--py)';
-  const confLabel = conf>=80?'高':conf>=60?'中':'低';
-  ar.innerHTML += `<div class="conf-chip anim" title="${r.confidence_note||''}">
-    <span class="conf-ring" style="--cc:${confColor}">
-      <span class="conf-val">${conf}%</span>
-    </span>
-    <span class="conf-lbl">信心度<br><span style="color:${confColor}">${confLabel}</span></span>
-  </div>`;
 
-  // get card from DB
-  const cardKey=`${r.x}-${r.y}-${r.z}`;
-  const dbCard=CARDS_DB[cardKey]||{name:'當前狀態',cue:'',insight:'',next:r.next};
-
-  // main card — merges DB card + AI insights
+  // main card
+  const matched=matchSits(r.x,r.y,r.z);
+  const main=matched[0];
   document.getElementById('sit-main').innerHTML=`
-  <div class="main-card open anim">
-    <div class="main-card-hd" onclick="this.parentElement.classList.toggle('open')">
-      <div class="card-coord-badge"><span class="bx">X${r.x}</span> <span class="by">Y${r.y}</span> <span class="bz">Z${r.z}</span></div>
-      <div class="main-card-title-wrap">
-        <div class="main-card-label">✦ 你目前的位置</div>
-        <div class="main-card-name">${dbCard.name}</div>
-        ${dbCard.cue?`<div class="main-card-cue">${dbCard.cue}</div>`:''}
+  <div class="sit-card open anim">
+    <div class="sit-card-hd" onclick="this.parentElement.classList.toggle('open')">
+      <div class="sit-emoji">${main.emoji}</div>
+      <div class="sit-hd-r">
+        <div class="sit-label">✦ 最接近的情境</div>
+        <div class="sit-name">${main.name}</div>
+        <div class="sit-match">匹配度 ${main.score}%</div>
       </div>
-      <div class="main-card-arr">▲</div>
+      <div class="sit-arr">▲</div>
     </div>
-    <div class="main-card-body">
-      <div class="card-insight-box">${dbCard.insight}</div>
+    <div class="sit-body">
+      <div class="sit-desc">${main.desc}</div>
       <div class="insight-tabs">
         <button class="itab on" onclick="switchIT(0,this)">X 軸</button>
         <button class="itab" onclick="switchIT(1,this)">Y 軸</button>
         <button class="itab" onclick="switchIT(2,this)">Z 軸</button>
       </div>
-      <div class="insight-panel on">
+      <div class="insight-panel on" id="ip0">
         <div class="insight-note in-x">X${r.x}（${XL[r.x-1]}）</div>
         <div class="insight-text">${r.xi}</div>
       </div>
-      <div class="insight-panel">
+      <div class="insight-panel" id="ip1">
         <div class="insight-note in-y">Y${r.y}（${YL[r.y-1]}）</div>
         <div class="insight-text">${r.yi}</div>
       </div>
-      <div class="insight-panel">
+      <div class="insight-panel" id="ip2">
         <div class="insight-note in-z">Z${r.z}（${ZL[r.z-1]}）</div>
         <div class="insight-text">${r.zi}</div>
       </div>
-      <div class="today-box">${r.next||dbCard.next}</div>
+      <div class="today-box">${r.next}</div>
       <div class="today-remind">${r.remind}</div>
     </div>
   </div>`;
 
-  // sub area — situation matching + AI extension
-  const matched=matchSits(r.x,r.y,r.z);
+  // sub area: 1 相近情境 tag + AI延伸
+  const sub2=matched[1];
   document.getElementById('sub-area').innerHTML=`
   <div class="sub-wrap anim" style="animation-delay:.1s">
     <div class="sub-lbl">相近情境</div>
-    <div class="sub-tags">${matched.slice(0,4).map(s=>`<div class="sub-tag" onclick='showSubM(${JSON.stringify(s).replace(/'/g,"&#39;")})'><span>${s.emoji}</span><span>${s.name}</span><span class="sub-tag-score">${s.score}%</span></div>`).join('')}</div>
-    <div class="sub-extended"><div class="sub-extended-lbl">✦ AI 延伸思考</div>${r.sub_ext}</div>
+    <div class="sub-tags">
+      ${matched.slice(1,4).map(s=>`<div class="sub-tag" onclick="showSubM(${JSON.stringify(s).replace(/"/g,'&quot;')})"><span>${s.emoji}</span><span>${s.name}</span><span class="sub-tag-score">${s.score}%</span></div>`).join('')}
+    </div>
+    <div class="sub-extended anim" style="animation-delay:.18s">
+      <div class="sub-extended-lbl">✦ AI 延伸思考</div>
+      ${r.sub_ext}
+    </div>
   </div>`;
 
   // 身心靈
   const sgr=document.getElementById('sg-row');sgr.innerHTML='';
-  [{ico:'🫀',ibg:'rgba(244,114,182,.14)',ttl:'身體面向',body:r.body_s},
-   {ico:'🧠',ibg:'rgba(192,132,252,.14)',ttl:'心理面向',body:r.mind_s},
-   {ico:'✨',ibg:'rgba(52,211,153,.14)',ttl:'靈性面向',body:r.spirit_s},
+  [{ico:'🫀',ibg:'rgba(244,114,182,.13)',ttl:'身體面向',body:r.body_s},
+   {ico:'🧠',ibg:'rgba(192,132,252,.13)',ttl:'心理面向',body:r.mind_s},
+   {ico:'✨',ibg:'rgba(52,211,153,.13)',ttl:'靈性面向',body:r.spirit_s},
   ].forEach((sg,i)=>{
-    const el=document.createElement('div');el.className='sgc anim';el.style.animationDelay=(i*.07+.22)+'s';
+    const el=document.createElement('div');el.className='sgc anim';el.style.animationDelay=(i*.07+.25)+'s';
     el.innerHTML=`<div class="sgc-hd" onclick="this.parentElement.classList.toggle('open')"><div class="sg-ico" style="background:${sg.ibg}">${sg.ico}</div><div class="sgc-ttl">${sg.ttl}</div><div class="sgc-arr">▼</div></div><div class="sgc-body"><p>${sg.body}</p></div>`;
     sgr.appendChild(el);
   });
 
   document.getElementById('result').classList.add('on');
-  setTimeout(()=>{
-    document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
-    // set conic gradient percentage
-    const ring = document.querySelector('.conf-ring');
-    if(ring) ring.style.setProperty('--pct', r.confidence||0);
-  },110);
+  setTimeout(()=>document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
 function switchIT(idx,btn){
-  btn.closest('.main-card').querySelectorAll('.itab').forEach((t,i)=>t.classList.toggle('on',i===idx));
-  btn.closest('.main-card').querySelectorAll('.insight-panel').forEach((p,i)=>p.classList.toggle('on',i===idx));
+  btn.closest('.sit-card').querySelectorAll('.itab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+  btn.closest('.sit-card').querySelectorAll('.insight-panel').forEach((p,i)=>p.classList.toggle('on',i===idx));
 }
 function showSubM(s){
-  if(typeof s==='string')try{s=JSON.parse(s);}catch(e){}
+  if(typeof s==='string')s=JSON.parse(s.replace(/&quot;/g,'"'));
   document.getElementById('sm-t').textContent=`${s.emoji} ${s.name}`;
   document.getElementById('sm-b').textContent=`X${s.x} · Y${s.y} · Z${s.z}\n\n${s.desc}\n\n→ ${s.next}`;
   document.getElementById('sm-wrap').classList.add('on');
 }
 function closeSM(){document.getElementById('sm-wrap').classList.remove('on')}
 
-// ── SAVE / RESET ──────────────────────────────────────
-function saveRec(){
+async function saveRec(){
   if(!last)return;
-  const recs=JSON.parse(localStorage.getItem('acs_records')||'[]');
-  recs.unshift(last);if(recs.length>80)recs.pop();
-  localStorage.setItem('acs_records',JSON.stringify(recs));
-  const b=document.querySelectorAll('.btn-g')[0];
-  b.textContent='✓ 已儲存';setTimeout(()=>b.textContent='儲存這次定位',2200);
+  try{let recs=[];try{const d=await window.storage.get('acs_v5');if(d)recs=JSON.parse(d.value);}catch(e){}
+    recs.unshift(last);if(recs.length>80)recs.pop();
+    await window.storage.set('acs_v5',JSON.stringify(recs));
+    const b=document.querySelectorAll('.btn-g')[0];b.textContent='✓ 已儲存';setTimeout(()=>b.textContent='儲存這次定位',2000);
+  }catch(e){console.error(e);}
 }
 function reset(){
   document.getElementById('inp').value='';document.getElementById('note').value='';
   document.getElementById('result').classList.remove('on');
   last=null;buildSVG(null);window.scrollTo({top:0,behavior:'smooth'});
 }
-
-// ── HISTORY ───────────────────────────────────────────
-function renderHis(){
-  const recs=JSON.parse(localStorage.getItem('acs_records')||'[]');
+async function renderHis(){
+  let recs=[];try{const d=await window.storage.get('acs_v5');if(d)recs=JSON.parse(d.value);}catch(e){}
   const he=document.getElementById('he'),hl=document.getElementById('hl');
   hl.innerHTML='';
   if(!recs.length){he.style.display='';return;}he.style.display='none';
@@ -1225,20 +770,12 @@ function renderHis(){
     hl.appendChild(el);
   });
 }
-function delRec(i,e){
+async function delRec(i,e){
   e.stopPropagation();
-  const recs=JSON.parse(localStorage.getItem('acs_records')||'[]');
-  recs.splice(i,1);localStorage.setItem('acs_records',JSON.stringify(recs));renderHis();
+  try{const d=await window.storage.get('acs_v5');const recs=JSON.parse(d.value);recs.splice(i,1);await window.storage.set('acs_v5',JSON.stringify(recs));renderHis();}catch(e){}
 }
-
 function openInfo(){document.getElementById('info-modal').classList.add('on')}
 function closeInfo(){document.getElementById('info-modal').classList.remove('on')}
-
-// init Google Auth
-window.addEventListener('load', () => { if(typeof google!=='undefined') initGoogleAuth(); });
 </script>
-
-<!-- Google Identity Services -->
-<script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleAuth()"></script>
 </body>
 </html>
