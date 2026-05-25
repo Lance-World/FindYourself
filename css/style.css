@@ -250,3 +250,69 @@ textarea::placeholder,input::placeholder{color:rgba(255,255,255,.48)}
 .position-prompts{display:grid;gap:8px;margin-top:11px}
 .prompt-chip{padding:9px 11px;border-radius:999px;background:rgba(255,228,173,.18);border:1px solid rgba(255,255,255,.22);color:#fff1c8;font-size:14px}
 .position-note{margin:11px 0 0;color:rgba(255,255,255,.76);font-size:14px;line-height:1.7}
+
+
+.position-narrative{
+  margin:16px 0 14px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;
+  background:linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.045));
+  box-shadow:0 16px 36px rgba(27,20,74,.18);
+}
+.position-head h4{
+  margin:3px 0 10px;
+  font-size:1.08rem;
+  letter-spacing:.02em;
+}
+.position-state{
+  margin:0 0 12px;
+  line-height:1.75;
+  color:rgba(255,255,255,.88);
+}
+.position-grid{
+  display:grid;
+  gap:9px;
+  margin:12px 0;
+}
+.position-grid div{
+  padding:10px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+}
+.position-grid b{
+  display:block;
+  margin-bottom:4px;
+  color:#fff5d6;
+}
+.position-grid span{
+  display:block;
+  color:rgba(255,255,255,.82);
+  line-height:1.6;
+}
+.meaning-box{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:18px;
+  background:rgba(255,232,173,.12);
+  border:1px solid rgba(255,232,173,.22);
+}
+.meaning-box b{
+  display:block;
+  margin-bottom:6px;
+  color:#fff0bf;
+}
+.meaning-box ol{
+  margin:0;
+  padding-left:1.25rem;
+}
+.meaning-box li{
+  margin:6px 0;
+  line-height:1.65;
+}
+.meaning-text{
+  margin:12px 0 0;
+  line-height:1.75;
+  color:rgba(255,255,255,.86);
+}

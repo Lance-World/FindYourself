@@ -101,6 +101,69 @@
     $('resultPanel').scrollIntoView({behavior:'smooth', block:'start'});
   }
 
+
+  function positionNarrative(r){
+    const isExistential = /存在|意義|提煉|靈魂|價值|方向|主線|使命|人生|自由|自己|活出/.test(
+      [r.input, r.note, r.card?.name, r.card?.insight, r.card?.next, r.labels?.y, r.labels?.z].filter(Boolean).join(' ')
+    );
+    const title = isExistential ? '存在提問｜提煉意義' : '現在的定位是什麼';
+    const state = classifyPositionState(r);
+    const questions = isExistential ? [
+      '我現在最想逃開的，不一定是答案，而是哪一個真實的自己？',
+      '這個狀態正在逼我看見：我其實很在乎什麼？',
+      '如果不急著變好，我今天能先把哪一個感受說完整？'
+    ] : [
+      '這件事目前真正卡住的是規模、視角，還是整合程度？',
+      '我可以先把哪一軸移動 ±1 格，而不是一次修全部？',
+      '今天最小但有效的一步是什麼？'
+    ];
+
+    const meaning = isExistential
+      ? '這不是要你立刻找到人生答案，而是把混亂先提煉成可理解的訊號：你正在從「被狀態推著走」，慢慢轉成「能看見自己正在經歷什麼」。這一步本身就很重要。'
+      : '目前定位不是判分，而是幫你看見此刻落在哪個座標：問題大小、意識視角、整合程度。先定位，才不會把所有焦慮都揉成一團。';
+
+    return `
+      <section class="position-narrative">
+        <div class="position-head">
+          <p class="card-kicker">Position Narrative</p>
+          <h4>${escapeHtml(title)}</h4>
+        </div>
+        <p class="position-state">${escapeHtml(state)}</p>
+        <div class="position-grid">
+          <div><b>X｜問題規模</b><span>${escapeHtml(r.labels.x)}：${escapeHtml(r.reasons.x)}</span></div>
+          <div><b>Y｜意識維度</b><span>${escapeHtml(r.labels.y)}：${escapeHtml(r.reasons.y)}</span></div>
+          <div><b>Z｜整合程度</b><span>${escapeHtml(r.labels.z)}：${escapeHtml(r.reasons.z)}</span></div>
+        </div>
+        <div class="meaning-box">
+          <b>${isExistential ? '可以延伸看的方向' : '下一步判讀'}</b>
+          <ol>${questions.map(q=>`<li>${escapeHtml(q)}</li>`).join('')}</ol>
+        </div>
+        <p class="meaning-text">${escapeHtml(meaning)}</p>
+      </section>`;
+  }
+
+  function classifyPositionState(r){
+    const highX = r.x >= 5;
+    const highY = r.y >= 5;
+    const highZ = r.z >= 5;
+    const lowZ = r.z <= 2;
+    const lowY = r.y <= 2;
+
+    if(highX && lowZ){
+      return '你現在比較像是「感受到問題很大，但身體與內在還沒有足夠承接」。先不要逼自己想通全部，優先降低壓力密度。';
+    }
+    if(highX && highY && !highZ){
+      return '你已經看見比較大的脈絡，但整合還在路上。現在的重點不是再分析更多，而是把洞察轉成一個可執行的小行動。';
+    }
+    if(!highX && lowY){
+      return '目前事件本身可能不大，但你容易回到本能防衛或舊慣性。先穩住感受，再談判斷。';
+    }
+    if(highZ){
+      return '你已經有一定程度的整合力，可以同時看見感受、脈絡與行動。接下來適合微調，而不是大幅推翻自己。';
+    }
+    return '你目前位在「正在整理」的位置：有一些感受、有一些理解，但還需要把它們排出順序。先抓一個最真實的需求就好。';
+  }
+
   function axisMini(cls,title,coord,label,reason){
     return `<div class="axis-mini ${cls}"><span class="label">${escapeHtml(title)}</span><b>${escapeHtml(coord)}</b><p>${escapeHtml(label)}</p><p>${escapeHtml(reason)}</p></div>`;
   }
