@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#100d26" />
+  <meta name="theme-color" content="#1b1638" />
   <meta name="description" content="覺察座標系統：手機友善、可離線、本機判斷與 Serverless AI 文字整合。" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" href="./css/style.css" />
@@ -12,15 +12,24 @@
 <body>
   <canvas id="starCanvas" aria-hidden="true"></canvas>
 
+  <div class="space-decor" aria-hidden="true">
+    <span class="butterfly b1">🦋</span>
+    <span class="butterfly b2">🦋</span>
+    <span class="butterfly b3">🦋</span>
+    <span class="orb o1"></span>
+    <span class="orb o2"></span>
+    <span class="orb o3"></span>
+  </div>
+
   <main class="app-shell">
     <header class="hero">
       <button class="icon-btn hero-info" id="openInfoBtn" type="button" aria-label="說明">ⓘ</button>
       <p class="eyebrow">AWARENESS · COORDINATE · SYSTEM</p>
       <h1>覺察座標系統</h1>
-      <p class="hero-copy">先看見自己在哪裡，再往前移動一格。手機可用，本機先定位，AI 只負責延伸整合。</p>
+      <p class="hero-copy">先看見自己在哪裡，再往前移動一格。以標準 XYZ 立體座標呈現，本機先定位，AI 只負責延伸整合。</p>
       <div class="status-row">
         <span class="status-pill local">本機規則可用</span>
-        <span class="status-pill" id="aiStatus">AI 輔助可選</span>
+        <span class="status-pill" id="aiStatus">AI 未設定</span>
       </div>
     </header>
 
@@ -39,9 +48,8 @@
       <label class="field-label" for="noteInput">補充備註，可不填</label>
       <input id="noteInput" type="text" placeholder="今天的關鍵詞、身體感、或你想記住的一句話" />
 
-      <div class="action-grid">
+      <div class="action-grid single-action">
         <button class="primary-btn" id="analyzeBtn" type="button">✦ 開始定位</button>
-        <button class="secondary-btn" id="sampleBtn" type="button">放入範例</button>
       </div>
       <p class="tiny-note">沒有 AI 後端也能使用；AI 失敗時會自動保留本機結果。</p>
     </section>
@@ -50,12 +58,12 @@
       <div class="panel-head compact">
         <div>
           <p class="section-kicker">STEP 02</p>
-          <h2 id="coordTitle">座標圖</h2>
+          <h2 id="coordTitle">XYZ 座標圖</h2>
         </div>
         <button class="ghost-btn" id="resetBtn" type="button">重置</button>
       </div>
-      <div class="coord-frame"><svg id="coordSvg" viewBox="0 0 380 360" role="img" aria-label="X Y Z 覺察座標圖"></svg></div>
-      <p class="coord-hint" id="coordHint">輸入後，X / Y / Z 三軸位置會亮起。</p>
+      <div class="coord-frame"><svg id="coordSvg" viewBox="0 0 420 380" role="img" aria-label="X Y Z 覺察座標圖"></svg></div>
+      <p class="coord-hint" id="coordHint">輸入後，會以標準 XYZ 立體座標亮起你的位置。</p>
     </section>
 
     <section class="result panel" id="resultPanel" hidden aria-live="polite">
@@ -69,7 +77,6 @@
 
       <div class="result-stack">
         <article class="result-card xyz-card" id="mainResult"></article>
-        <article class="result-card spirit-card" id="insightGrid"></article>
         <article class="result-card ai-card" id="aiBox"></article>
         <article class="result-card neighbor-box" id="neighborBox"></article>
       </div>

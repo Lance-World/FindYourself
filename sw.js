@@ -1,4 +1,4 @@
-const CACHE_NAME = 'awareness-hybrid-mobile-v2';
+const CACHE_NAME = 'awareness-hybrid-mobile-v4';
 const ASSETS = [
   './',
   './index.html',
