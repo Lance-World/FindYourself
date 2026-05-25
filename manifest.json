@@ -1,0 +1,17 @@
+{
+  "name": "覺察座標系統",
+  "short_name": "覺察座標",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#07051a",
+  "theme_color": "#100d26",
+  "description": "手機友善的自我覺察座標工具：本機規則 + Serverless AI 文字整合。",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

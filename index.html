@@ -1,13 +1,135 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=./awareness-v5.html">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#100d26" />
+  <meta name="description" content="覺察座標系統：手機友善、可離線、本機判斷與 Serverless AI 文字整合。" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./css/style.css" />
   <title>覺察座標系統</title>
-  <script>location.replace('./awareness-v5.html');</script>
 </head>
 <body>
-  <p>正在前往 <a href="./awareness-v5.html">覺察座標系統</a>...</p>
+  <canvas id="starCanvas" aria-hidden="true"></canvas>
+
+  <main class="app-shell">
+    <header class="hero">
+      <button class="icon-btn hero-info" id="openInfoBtn" type="button" aria-label="說明">ⓘ</button>
+      <p class="eyebrow">AWARENESS · COORDINATE · SYSTEM</p>
+      <h1>覺察座標系統</h1>
+      <p class="hero-copy">先看見自己在哪裡，再選擇下一步怎麼走。手機可用，本機先判斷，AI 只做文字整合。</p>
+      <div class="status-row">
+        <span class="status-pill local">本機規則可用</span>
+        <span class="status-pill" id="aiStatus">AI 未設定</span>
+      </div>
+    </header>
+
+    <section class="panel input-panel" aria-labelledby="inputTitle">
+      <div class="panel-head">
+        <div>
+          <p class="section-kicker">STEP 01</p>
+          <h2 id="inputTitle">輸入現在的狀態</h2>
+        </div>
+        <button class="ghost-btn" id="openSettingsBtn" type="button">AI 設定</button>
+      </div>
+
+      <label class="field-label" for="stateInput">現在最佔據你的事</label>
+      <textarea id="stateInput" rows="6" placeholder="例如：主管一直問我進度，我身體很緊繃，腦袋當機，很想逃。但我也知道這可能跟我面對權威時害怕被審判有關……"></textarea>
+
+      <label class="field-label" for="noteInput">補充備註，可不填</label>
+      <input id="noteInput" type="text" placeholder="今天的關鍵詞、身體感、或你想記住的一句話" />
+
+      <div class="action-grid">
+        <button class="primary-btn" id="analyzeBtn" type="button">✦ 開始定位</button>
+        <button class="secondary-btn" id="sampleBtn" type="button">放入範例</button>
+      </div>
+      <p class="tiny-note">沒有 AI 後端也能使用；AI 失敗時會自動保留本機結果。</p>
+    </section>
+
+    <section class="coord-card panel" aria-labelledby="coordTitle">
+      <div class="panel-head compact">
+        <div>
+          <p class="section-kicker">STEP 02</p>
+          <h2 id="coordTitle">座標圖</h2>
+        </div>
+        <button class="ghost-btn" id="resetBtn" type="button">重置</button>
+      </div>
+      <svg id="coordSvg" viewBox="0 0 380 310" role="img" aria-label="X Y Z 覺察座標圖"></svg>
+      <p class="coord-hint" id="coordHint">輸入後，X / Y / Z 三軸位置會亮起。</p>
+    </section>
+
+    <section class="result panel" id="resultPanel" hidden aria-live="polite">
+      <div class="panel-head compact">
+        <div>
+          <p class="section-kicker">STEP 03</p>
+          <h2>定位結果</h2>
+        </div>
+        <button class="ghost-btn" id="saveBtn" type="button">儲存</button>
+      </div>
+
+      <div class="axis-chips" id="axisChips"></div>
+      <article class="main-result" id="mainResult"></article>
+      <div class="insight-grid" id="insightGrid"></div>
+      <div class="ai-box" id="aiBox" hidden></div>
+      <div class="neighbor-box" id="neighborBox"></div>
+    </section>
+
+    <section class="panel history-panel" aria-labelledby="historyTitle">
+      <div class="panel-head compact">
+        <div>
+          <p class="section-kicker">LOCAL</p>
+          <h2 id="historyTitle">歷史紀錄</h2>
+        </div>
+        <button class="ghost-btn" id="clearHistoryBtn" type="button">清空</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </main>
+
+  <dialog class="modal" id="settingsDialog">
+    <form method="dialog" class="modal-card">
+      <div class="modal-head">
+        <h2>AI 後端設定</h2>
+        <button class="icon-btn" value="close" aria-label="關閉">×</button>
+      </div>
+      <p class="modal-copy">GitHub Pages 不能安全保存 API key。請把金鑰放在 Cloudflare Worker 或 Vercel Function，前端只填 Serverless API URL。</p>
+      <label class="field-label" for="endpointInput">Serverless API URL</label>
+      <input id="endpointInput" type="url" placeholder="https://your-worker.workers.dev/api/analyze" />
+      <div class="settings-actions">
+        <button class="primary-btn" id="saveSettingsBtn" value="save" type="button">儲存設定</button>
+        <button class="secondary-btn" id="clearSettingsBtn" value="clear" type="button">清除 AI 設定</button>
+      </div>
+      <p class="tiny-note">URL 只存在你的瀏覽器 localStorage；不需要在前端放任何 API key。</p>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="infoDialog">
+    <form method="dialog" class="modal-card info-card">
+      <div class="modal-head">
+        <h2>三軸說明</h2>
+        <button class="icon-btn" value="close" aria-label="關閉">×</button>
+      </div>
+      <div class="info-section">
+        <h3>X 軸｜問題規模</h3>
+        <p>你把事情放在多大的脈絡裡看：身體、情緒、個人模式、關係、家庭、社會、存在。</p>
+      </div>
+      <div class="info-section">
+        <h3>Y 軸｜意識維度</h3>
+        <p>你用什麼視角理解事情：單一反應、二元對立、因果、核心、創造、系統、意義。</p>
+      </div>
+      <div class="info-section">
+        <h3>Z 軸｜整合程度</h3>
+        <p>你和自己和解到哪一步：被淹沒、命名、理解、接納、選擇、練習、轉化。</p>
+      </div>
+      <div class="disclaimer">
+        本工具是自我覺察輔助，不是心理諮商、醫療診斷或治療建議。若有嚴重痛苦或安全風險，請尋求專業協助。
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./js/cards-db.js"></script>
+  <script src="./js/local-analyzer.js"></script>
+  <script src="./js/ai-client.js"></script>
+  <script src="./js/app.js"></script>
 </body>
 </html>
